@@ -6,7 +6,7 @@ import viteLogo from "/vite.svg";
 function App() {
   return (
     <div>
-      hello world
+     Fetch Users
     </div>
   );
 }

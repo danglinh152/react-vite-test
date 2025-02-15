@@ -19,6 +19,7 @@ import {
 } from "react-router-dom";
 import Todolist from "./pages/todolist.tsx";
 import Counter from "./pages/counter.tsx";
+import UserTable from "./components/users.table.tsx";
 
 const { Header, Sider, Content } = Layout;
 
@@ -107,7 +108,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <App />,
+        element: <UserTable />,
       },
       {
         path: "/todo",
