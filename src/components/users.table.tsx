@@ -1,5 +1,9 @@
-import { Space, Table, Tag, Button, Popconfirm, Modal, Pagination } from "antd";
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { Space, Table, Tag, Button, Popconfirm, Modal } from "antd";
+import {
+  DeleteOutlined,
+  PlusOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 import { useEffect, useState } from "react";
 
 const { Column, ColumnGroup } = Table;
@@ -10,6 +14,9 @@ interface User {
   lastName: string;
   gender: string;
   email: string;
+  phoneNumber: string;
+  username: string;
+  role: { roleId: number };
 }
 
 interface Role {
@@ -21,13 +28,8 @@ const UserTable: React.FC = () => {
   const [listUser, setListUser] = useState<User[]>([]);
   const [listRole, setListRole] = useState<Role[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [pageSize, setPageSize] = useState(5);
-
-  // const handleTableChange = (pagination: any) => {
-  //   setCurrentPage(pagination.current);
-  //   setPageSize(pagination.pageSize);
-  // };
+  const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
+  const [userUpdate, setUserUpdate] = useState<User | null>(null);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -58,12 +60,12 @@ const UserTable: React.FC = () => {
       gender,
       email,
       phoneNumber,
-      role: { roleId },
+      role: { roleId: Number(roleId) },
     };
 
     const url = "http://localhost:8080/api/users"; // Your API endpoint
     const token =
-      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTgwMjQ0NiwiaWF0IjoxNzM5NzE2MDQ2LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.vGbFamqmDscNQqaSMap45OpCJ9xBtOoVjV4EHyGOKQPvXnv0Yt-07OxjmBwp-jNXWa5DNcSsSbKKqt4xrGJg-A"; // Replace with your actual token
+      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTg1MDkzNCwiaWF0IjoxNzM5NzY0NTM0LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.fdFRM_bBj-5WA6Mn-ceabviOnCD-lV-J7x0oWX3vCnCRH4clCjguYrKKg78sknMrCHrSqGMpYnNe6jFAI9cMxw"; // Replace with your actual token
     const headers = new Headers({
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -84,27 +86,136 @@ const UserTable: React.FC = () => {
       setIsModalOpen(false); // Close the modal
 
       // Clear input fields
-      (document.getElementById("username") as HTMLInputElement).value = "";
-      (document.getElementById("password") as HTMLInputElement).value = "";
-      (document.getElementById("firstname") as HTMLInputElement).value = "";
-      (document.getElementById("lastname") as HTMLInputElement).value = "";
-      (document.getElementById("gender") as HTMLSelectElement).value = "";
-      (document.getElementById("email") as HTMLInputElement).value = "";
-      (document.getElementById("phonenumber") as HTMLInputElement).value = "";
-      (document.getElementById("role") as HTMLSelectElement).value = "";
+      clearInputFields();
     } catch (error: any) {
       console.error(error.message);
     }
   };
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
+  const handleOkUpdate = async () => {
+    const username = (document.getElementById("username") as HTMLInputElement)
+      .value;
+    const password = (document.getElementById("password") as HTMLInputElement)
+      .value;
+    const firstName = (document.getElementById("firstname") as HTMLInputElement)
+      .value;
+    const lastName = (document.getElementById("lastname") as HTMLInputElement)
+      .value;
+    const gender = (document.getElementById("gender") as HTMLSelectElement)
+      .value;
+    const email = (document.getElementById("email") as HTMLInputElement).value;
+    const phoneNumber = (
+      document.getElementById("phonenumber") as HTMLInputElement
+    ).value;
+    const roleId = (document.getElementById("role") as HTMLSelectElement).value;
+
+    const updatedUser = {
+      userId: userUpdate?.userId,
+      username,
+      password,
+      firstName,
+      lastName,
+      gender,
+      email,
+      phoneNumber,
+      role: { roleId: Number(roleId) },
+    };
+
+    const url = `http://localhost:8080/api/users/${userUpdate?.userId}`; // Your API endpoint
+    const token =
+      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTg1MDkzNCwiaWF0IjoxNzM5NzY0NTM0LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.fdFRM_bBj-5WA6Mn-ceabviOnCD-lV-J7x0oWX3vCnCRH4clCjguYrKKg78sknMrCHrSqGMpYnNe6jFAI9cMxw"; // Replace with your actual token
+    const headers = new Headers({
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    });
+
+    try {
+      const response = await fetch(url, {
+        method: "PUT",
+        headers,
+        body: JSON.stringify(updatedUser),
+      });
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+
+      const json = await response.json();
+      setListUser((prevUsers) =>
+        prevUsers.map((user) =>
+          user.userId === json.data.userId ? json.data : user
+        )
+      ); // Update state with the updated user
+      setIsModalUpdateOpen(false); // Close the modal
+
+      // Clear input fields
+      clearInputFields();
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  };
+
+  const showUpdateModal = (userId: number) => {
+    getOneUser(userId);
+    setIsModalUpdateOpen(true);
+  };
+
+  const getOneUser = async (userId: number) => {
+    const url = `http://localhost:8080/api/users/${userId}`;
+    const token =
+      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTg1MDkzNCwiaWF0IjoxNzM5NzY0NTM0LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.fdFRM_bBj-5WA6Mn-ceabviOnCD-lV-J7x0oWX3vCnCRH4clCjguYrKKg78sknMrCHrSqGMpYnNe6jFAI9cMxw"; // Replace with your actual token
+    const headers = new Headers({
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    });
+
+    try {
+      const response = await fetch(url, {
+        headers,
+      });
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+
+      const json = await response.json();
+      setUserUpdate(json.data); // Set user data for update
+      populateUpdateFields(json.data); // Populate fields with user data
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
+  const populateUpdateFields = (user: User) => {
+    (document.getElementById("username") as HTMLInputElement).value =
+      user.username;
+    (document.getElementById("password") as HTMLInputElement).value = ""; // Password should not be pre-filled
+    (document.getElementById("firstname") as HTMLInputElement).value =
+      user.firstName;
+    (document.getElementById("lastname") as HTMLInputElement).value =
+      user.lastName;
+    (document.getElementById("gender") as HTMLSelectElement).value =
+      user.gender;
+    (document.getElementById("email") as HTMLInputElement).value = user.email;
+    (document.getElementById("phonenumber") as HTMLInputElement).value =
+      user.phoneNumber;
+    (document.getElementById("role") as HTMLSelectElement).value =
+      user.role.roleId.toString();
+  };
+
+  const clearInputFields = () => {
+    (document.getElementById("username") as HTMLInputElement).value = "";
+    (document.getElementById("password") as HTMLInputElement).value = "";
+    (document.getElementById("firstname") as HTMLInputElement).value = "";
+    (document.getElementById("lastname") as HTMLInputElement).value = "";
+    (document.getElementById("gender") as HTMLSelectElement).value = "MALE"; // Default value
+    (document.getElementById("email") as HTMLInputElement).value = "";
+    (document.getElementById("phonenumber") as HTMLInputElement).value = "";
+    (document.getElementById("role") as HTMLSelectElement).value = ""; // Default value
   };
 
   const deleteUser = async (userId: number) => {
     const url = `http://localhost:8080/api/users/${userId}`;
     const token =
-      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTgwMjQ0NiwiaWF0IjoxNzM5NzE2MDQ2LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.vGbFamqmDscNQqaSMap45OpCJ9xBtOoVjV4EHyGOKQPvXnv0Yt-07OxjmBwp-jNXWa5DNcSsSbKKqt4xrGJg-A"; // Replace with your actual token
+      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTg1MDkzNCwiaWF0IjoxNzM5NzY0NTM0LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.fdFRM_bBj-5WA6Mn-ceabviOnCD-lV-J7x0oWX3vCnCRH4clCjguYrKKg78sknMrCHrSqGMpYnNe6jFAI9cMxw"; // Replace with your actual token
     const headers = new Headers({
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -136,7 +247,7 @@ const UserTable: React.FC = () => {
   async function getUserData() {
     const url = "http://localhost:8080/api/users";
     const token =
-      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTgwMjQ0NiwiaWF0IjoxNzM5NzE2MDQ2LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.vGbFamqmDscNQqaSMap45OpCJ9xBtOoVjV4EHyGOKQPvXnv0Yt-07OxjmBwp-jNXWa5DNcSsSbKKqt4xrGJg-A"; // Replace with your actual token
+      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTg1MDkzNCwiaWF0IjoxNzM5NzY0NTM0LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.fdFRM_bBj-5WA6Mn-ceabviOnCD-lV-J7x0oWX3vCnCRH4clCjguYrKKg78sknMrCHrSqGMpYnNe6jFAI9cMxw"; // Replace with your actual token
     const headers = new Headers({
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -160,7 +271,7 @@ const UserTable: React.FC = () => {
   async function getRoleData() {
     const url = "http://localhost:8080/api/roles";
     const token =
-      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTgwMjQ0NiwiaWF0IjoxNzM5NzE2MDQ2LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.vGbFamqmDscNQqaSMap45OpCJ9xBtOoVjV4EHyGOKQPvXnv0Yt-07OxjmBwp-jNXWa5DNcSsSbKKqt4xrGJg-A"; // Replace with your actual token
+      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTg1MDkzNCwiaWF0IjoxNzM5NzY0NTM0LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.fdFRM_bBj-5WA6Mn-ceabviOnCD-lV-J7x0oWX3vCnCRH4clCjguYrKKg78sknMrCHrSqGMpYnNe6jFAI9cMxw"; // Replace with your actual token
     const headers = new Headers({
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -196,7 +307,7 @@ const UserTable: React.FC = () => {
           title="Add User"
           open={isModalOpen}
           onOk={handleOk}
-          onCancel={handleCancel}
+          onCancel={() => setIsModalOpen(false)}
         >
           <div>
             <p>First Name</p>
@@ -280,23 +391,53 @@ const UserTable: React.FC = () => {
                     Delete
                   </Button>
                 </Popconfirm>
+                <Button
+                  type="primary"
+                  icon={<UploadOutlined />}
+                  onClick={() => showUpdateModal(record.userId)}
+                >
+                  Update
+                </Button>
               </Space>
             )}
           />
         </Table>
-        {/* <div
-          style={{
-            marginTop: "10px",
-            alignSelf: "center",
-          }}
-        >
-          <Pagination
-            defaultCurrent={currentPage}
-            total={listUser.length}
-            onChange={handleTableChange}
-          />
-        </div> */}
       </div>
+
+      <Modal
+        title="Update User"
+        open={isModalUpdateOpen}
+        onOk={handleOkUpdate}
+        onCancel={() => setIsModalUpdateOpen(false)}
+      >
+        <div>
+          <p>First Name</p>
+          <input type="text" id="firstname" />
+          <p>Last Name</p>
+          <input type="text" id="lastname" />
+          <p>Gender</p>
+          <select id="gender">
+            <option value="MALE">MALE</option>
+            <option value="FEMALE">FEMALE</option>
+          </select>
+          <p>Username</p>
+          <input type="text" id="username" />
+          <p>Password</p>
+          <input type="password" id="password" />
+          <p>Email</p>
+          <input type="text" id="email" />
+          <p>Phone Number</p>
+          <input type="text" id="phonenumber" />
+          <p>Role</p>
+          <select id="role">
+            {listRole.map((item) => (
+              <option key={item.roleId} value={item.roleId}>
+                {item.roleName}
+              </option>
+            ))}
+          </select>
+        </div>
+      </Modal>
     </div>
   );
 };
