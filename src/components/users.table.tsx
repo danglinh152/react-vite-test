@@ -5,6 +5,7 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
+import FormDisabledDemo from "./form";
 
 const { Column, ColumnGroup } = Table;
 
@@ -36,60 +37,60 @@ const UserTable: React.FC = () => {
   };
 
   const handleOk = async () => {
-    const username = (document.getElementById("username") as HTMLInputElement)
-      .value;
-    const password = (document.getElementById("password") as HTMLInputElement)
-      .value;
-    const firstName = (document.getElementById("firstname") as HTMLInputElement)
-      .value;
-    const lastName = (document.getElementById("lastname") as HTMLInputElement)
-      .value;
-    const gender = (document.getElementById("gender") as HTMLSelectElement)
-      .value;
-    const email = (document.getElementById("email") as HTMLInputElement).value;
-    const phoneNumber = (
-      document.getElementById("phonenumber") as HTMLInputElement
-    ).value;
-    const roleId = (document.getElementById("role") as HTMLSelectElement).value;
+    // const username = (document.getElementById("username") as HTMLInputElement)
+    //   .value;
+    // const password = (document.getElementById("password") as HTMLInputElement)
+    //   .value;
+    // const firstName = (document.getElementById("firstname") as HTMLInputElement)
+    //   .value;
+    // const lastName = (document.getElementById("lastname") as HTMLInputElement)
+    //   .value;
+    // const gender = (document.getElementById("gender") as HTMLSelectElement)
+    //   .value;
+    // const email = (document.getElementById("email") as HTMLInputElement).value;
+    // const phoneNumber = (
+    //   document.getElementById("phonenumber") as HTMLInputElement
+    // ).value;
+    // const roleId = (document.getElementById("role") as HTMLSelectElement).value;
 
-    const newUser = {
-      username,
-      password,
-      firstName,
-      lastName,
-      gender,
-      email,
-      phoneNumber,
-      role: { roleId: Number(roleId) },
-    };
+    // const newUser = {
+    //   username,
+    //   password,
+    //   firstName,
+    //   lastName,
+    //   gender,
+    //   email,
+    //   phoneNumber,
+    //   role: { roleId: Number(roleId) },
+    // };
 
-    const url = "http://localhost:8080/api/users"; // Your API endpoint
-    const token =
-      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTg1MDkzNCwiaWF0IjoxNzM5NzY0NTM0LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.fdFRM_bBj-5WA6Mn-ceabviOnCD-lV-J7x0oWX3vCnCRH4clCjguYrKKg78sknMrCHrSqGMpYnNe6jFAI9cMxw"; // Replace with your actual token
-    const headers = new Headers({
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    });
+    // const url = "http://localhost:8080/api/users"; // Your API endpoint
+    // const token =
+    //   "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTkzMjk1OCwiaWF0IjoxNzM5ODQ2NTU4LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.xBbL3zf6n-HZFPtUgxPSOeSjRPzvnRnyd9Dj8U3no6kaPvcc7pJ8XUxkFAINlcf8hizMskTU8Sy464aFql3q2g"; // Replace with your actual token
+    // const headers = new Headers({
+    //   Authorization: `Bearer ${token}`,
+    //   "Content-Type": "application/json",
+    // });
 
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers,
-        body: JSON.stringify(newUser),
-      });
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-      }
+    // try {
+    //   const response = await fetch(url, {
+    //     method: "POST",
+    //     headers,
+    //     body: JSON.stringify(newUser),
+    //   });
+    //   if (!response.ok) {
+    //     throw new Error(`Response status: ${response.status}`);
+    //   }
 
-      const json = await response.json();
-      setListUser((prevUsers) => [...prevUsers, json.data]); // Update state with the new user
-      setIsModalOpen(false); // Close the modal
+    //   const json = await response.json();
+    //   setListUser((prevUsers) => [...prevUsers, json.data]); // Update state with the new user
+    //   setIsModalOpen(false); // Close the modal
 
-      // Clear input fields
-      clearInputFields();
-    } catch (error: any) {
-      console.error(error.message);
-    }
+    //   // Clear input fields
+    //   clearInputFields();
+    // } catch (error: any) {
+    //   console.error(error.message);
+    // }
   };
 
   const handleOkUpdate = async () => {
@@ -121,9 +122,9 @@ const UserTable: React.FC = () => {
       role: { roleId: Number(roleId) },
     };
 
-    const url = `http://localhost:8080/api/users/${userUpdate?.userId}`; // Your API endpoint
+    const url = `http://localhost:8080/api/users`; // Your API endpoint
     const token =
-      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTg1MDkzNCwiaWF0IjoxNzM5NzY0NTM0LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.fdFRM_bBj-5WA6Mn-ceabviOnCD-lV-J7x0oWX3vCnCRH4clCjguYrKKg78sknMrCHrSqGMpYnNe6jFAI9cMxw"; // Replace with your actual token
+      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTkzMjk1OCwiaWF0IjoxNzM5ODQ2NTU4LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.xBbL3zf6n-HZFPtUgxPSOeSjRPzvnRnyd9Dj8U3no6kaPvcc7pJ8XUxkFAINlcf8hizMskTU8Sy464aFql3q2g"; // Replace with your actual token
     const headers = new Headers({
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -162,7 +163,7 @@ const UserTable: React.FC = () => {
   const getOneUser = async (userId: number) => {
     const url = `http://localhost:8080/api/users/${userId}`;
     const token =
-      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTg1MDkzNCwiaWF0IjoxNzM5NzY0NTM0LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.fdFRM_bBj-5WA6Mn-ceabviOnCD-lV-J7x0oWX3vCnCRH4clCjguYrKKg78sknMrCHrSqGMpYnNe6jFAI9cMxw"; // Replace with your actual token
+      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTkzMjk1OCwiaWF0IjoxNzM5ODQ2NTU4LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.xBbL3zf6n-HZFPtUgxPSOeSjRPzvnRnyd9Dj8U3no6kaPvcc7pJ8XUxkFAINlcf8hizMskTU8Sy464aFql3q2g"; // Replace with your actual token
     const headers = new Headers({
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -177,6 +178,7 @@ const UserTable: React.FC = () => {
       }
 
       const json = await response.json();
+
       setUserUpdate(json.data); // Set user data for update
       populateUpdateFields(json.data); // Populate fields with user data
     } catch (error: any) {
@@ -215,7 +217,7 @@ const UserTable: React.FC = () => {
   const deleteUser = async (userId: number) => {
     const url = `http://localhost:8080/api/users/${userId}`;
     const token =
-      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTg1MDkzNCwiaWF0IjoxNzM5NzY0NTM0LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.fdFRM_bBj-5WA6Mn-ceabviOnCD-lV-J7x0oWX3vCnCRH4clCjguYrKKg78sknMrCHrSqGMpYnNe6jFAI9cMxw"; // Replace with your actual token
+      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTkzMjk1OCwiaWF0IjoxNzM5ODQ2NTU4LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.xBbL3zf6n-HZFPtUgxPSOeSjRPzvnRnyd9Dj8U3no6kaPvcc7pJ8XUxkFAINlcf8hizMskTU8Sy464aFql3q2g"; // Replace with your actual token
     const headers = new Headers({
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -247,7 +249,7 @@ const UserTable: React.FC = () => {
   async function getUserData() {
     const url = "http://localhost:8080/api/users";
     const token =
-      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTg1MDkzNCwiaWF0IjoxNzM5NzY0NTM0LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.fdFRM_bBj-5WA6Mn-ceabviOnCD-lV-J7x0oWX3vCnCRH4clCjguYrKKg78sknMrCHrSqGMpYnNe6jFAI9cMxw"; // Replace with your actual token
+      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTkzMjk1OCwiaWF0IjoxNzM5ODQ2NTU4LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.xBbL3zf6n-HZFPtUgxPSOeSjRPzvnRnyd9Dj8U3no6kaPvcc7pJ8XUxkFAINlcf8hizMskTU8Sy464aFql3q2g"; // Replace with your actual token
     const headers = new Headers({
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -268,10 +270,10 @@ const UserTable: React.FC = () => {
     }
   }
 
-  async function getRoleData() {
+  const getRoleData = async () => {
     const url = "http://localhost:8080/api/roles";
     const token =
-      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTg1MDkzNCwiaWF0IjoxNzM5NzY0NTM0LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.fdFRM_bBj-5WA6Mn-ceabviOnCD-lV-J7x0oWX3vCnCRH4clCjguYrKKg78sknMrCHrSqGMpYnNe6jFAI9cMxw"; // Replace with your actual token
+      "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYW5nbGluaDE1MiIsImV4cCI6MTczOTkzMjk1OCwiaWF0IjoxNzM5ODQ2NTU4LCJpbmZvQWNjZXNzVG9rZW4iOiJkYW5nbGluaDE1MiJ9.xBbL3zf6n-HZFPtUgxPSOeSjRPzvnRnyd9Dj8U3no6kaPvcc7pJ8XUxkFAINlcf8hizMskTU8Sy464aFql3q2g"; // Replace with your actual token
     const headers = new Headers({
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -309,7 +311,7 @@ const UserTable: React.FC = () => {
           onOk={handleOk}
           onCancel={() => setIsModalOpen(false)}
         >
-          <div>
+          {/* <div>
             <p>First Name</p>
             <input type="text" id="firstname" />
             <p>Last Name</p>
@@ -335,7 +337,8 @@ const UserTable: React.FC = () => {
                 </option>
               ))}
             </select>
-          </div>
+          </div> */}
+          <FormDisabledDemo />
         </Modal>
       </div>
 
