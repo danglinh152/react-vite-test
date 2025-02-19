@@ -9,13 +9,15 @@ import {
   Button,
   Radio,
   Select,
+  InputNumber,
 } from "antd";
 import {
   DeleteOutlined,
   PlusOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 const { Column, ColumnGroup } = Table;
 
@@ -40,16 +42,20 @@ const AddUserModal: React.FC<{
   onClose: () => void;
   onSubmit: (values: any) => void;
   listRole: Role[];
-}> = ({ visible, onClose, onSubmit, listRole }) => (
-  <Modal title="Add User" open={visible} onCancel={onClose} footer={null}>
-    <Form onFinish={onSubmit} layout="vertical">
+  form: any;
+}> = ({ visible, onClose, onSubmit, listRole, form }) => (
+  <Modal
+    title="Add User"
+    open={visible}
+    onCancel={onClose}
+    onOk={() => form.submit()} // Submits the form when OK is clicked
+  >
+    <Form onFinish={onSubmit} layout="vertical" form={form}>
       <Form.Item
         label="First Name"
         name="firstName"
         rules={[{ required: true }]}
-        style={{
-          marginBottom: 5,
-        }}
+        style={{ marginBottom: 5 }}
       >
         <Input />
       </Form.Item>
@@ -57,9 +63,7 @@ const AddUserModal: React.FC<{
         label="Last Name"
         name="lastName"
         rules={[{ required: true }]}
-        style={{
-          marginBottom: 5,
-        }}
+        style={{ marginBottom: 5 }}
       >
         <Input />
       </Form.Item>
@@ -67,9 +71,7 @@ const AddUserModal: React.FC<{
         label="Gender"
         name="gender"
         rules={[{ required: true }]}
-        style={{
-          marginBottom: 5,
-        }}
+        style={{ marginBottom: 5 }}
       >
         <Radio.Group>
           <Radio value="MALE">MALE</Radio>
@@ -80,9 +82,7 @@ const AddUserModal: React.FC<{
         label="Email"
         name="email"
         rules={[{ required: true, type: "email" }]}
-        style={{
-          marginBottom: 5,
-        }}
+        style={{ marginBottom: 5 }}
       >
         <Input />
       </Form.Item>
@@ -90,19 +90,15 @@ const AddUserModal: React.FC<{
         label="Phone No."
         name="phoneNumber"
         rules={[{ required: true, type: "number" }]}
-        style={{
-          marginBottom: 5,
-        }}
+        style={{ marginBottom: 5 }}
       >
-        <Input />
+        <InputNumber />
       </Form.Item>
       <Form.Item
         label="Username"
         name="username"
         rules={[{ required: true }]}
-        style={{
-          marginBottom: 5,
-        }}
+        style={{ marginBottom: 5 }}
       >
         <Input />
       </Form.Item>
@@ -110,9 +106,7 @@ const AddUserModal: React.FC<{
         label="Password"
         name="password"
         rules={[{ required: true }]}
-        style={{
-          marginBottom: 5,
-        }}
+        style={{ marginBottom: 5 }}
       >
         <Input.Password />
       </Form.Item>
@@ -120,9 +114,7 @@ const AddUserModal: React.FC<{
         label="Role"
         name="role"
         rules={[{ required: true }]}
-        style={{
-          marginBottom: 15,
-        }}
+        style={{ marginBottom: 15 }}
       >
         <Select>
           {listRole.map((item) => (
@@ -132,15 +124,6 @@ const AddUserModal: React.FC<{
           ))}
         </Select>
       </Form.Item>
-      <Form.Item
-        style={{
-          marginBottom: 5,
-        }}
-      >
-        <Button type="primary" htmlType="submit">
-          Add User
-        </Button>
-      </Form.Item>
     </Form>
   </Modal>
 );
@@ -149,31 +132,15 @@ const UpdateUserModal: React.FC<{
   visible: boolean;
   onClose: () => void;
   onSubmit: (values: any) => void;
-  user: User | null;
   listRole: Role[];
-}> = ({ visible, onClose, onSubmit, user, listRole }) => (
+  form: any;
+}> = ({ visible, onClose, onSubmit, listRole, form }) => (
   <Modal title="Update User" open={visible} onCancel={onClose} footer={null}>
-    <Form
-      onFinish={onSubmit}
-      layout="vertical"
-      initialValues={
-        user || {
-          firstName: "",
-          lastName: "",
-          gender: undefined,
-          email: "",
-          phoneNumber: "",
-          username: "",
-          role: undefined,
-        }
-      }
-    >
+    <Form onFinish={onSubmit} layout="vertical" form={form}>
       <Form.Item
         label="First Name"
         name="firstName"
-        style={{
-          marginBottom: 5,
-        }}
+        style={{ marginBottom: 5 }}
         rules={[{ required: true }]}
       >
         <Input />
@@ -181,9 +148,7 @@ const UpdateUserModal: React.FC<{
       <Form.Item
         label="Last Name"
         name="lastName"
-        style={{
-          marginBottom: 5,
-        }}
+        style={{ marginBottom: 5 }}
         rules={[{ required: true }]}
       >
         <Input />
@@ -191,9 +156,7 @@ const UpdateUserModal: React.FC<{
       <Form.Item
         label="Gender"
         name="gender"
-        style={{
-          marginBottom: 5,
-        }}
+        style={{ marginBottom: 5 }}
         rules={[{ required: true }]}
       >
         <Radio.Group>
@@ -204,9 +167,7 @@ const UpdateUserModal: React.FC<{
       <Form.Item
         label="Email"
         name="email"
-        style={{
-          marginBottom: 5,
-        }}
+        style={{ marginBottom: 5 }}
         rules={[{ required: true, type: "email" }]}
       >
         <Input />
@@ -214,19 +175,15 @@ const UpdateUserModal: React.FC<{
       <Form.Item
         label="Phone No."
         name="phoneNumber"
-        style={{
-          marginBottom: 5,
-        }}
+        style={{ marginBottom: 5 }}
         rules={[{ required: true, type: "number" }]}
       >
-        <Input />
+        <InputNumber />
       </Form.Item>
       <Form.Item
         label="Username"
         name="username"
-        style={{
-          marginBottom: 5,
-        }}
+        style={{ marginBottom: 5 }}
         rules={[{ required: true }]}
       >
         <Input />
@@ -234,9 +191,7 @@ const UpdateUserModal: React.FC<{
       <Form.Item
         label="Role"
         name="role"
-        style={{
-          marginBottom: 15,
-        }}
+        style={{ marginBottom: 15 }}
         rules={[{ required: true }]}
       >
         <Select>
@@ -261,8 +216,9 @@ const ManageUser: React.FC = () => {
   const [listRole, setListRole] = useState<Role[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
-  const [userUpdate, setUserUpdate] = useState<User | null>(null);
-  const [form] = Form.useForm();
+  const [formAdd] = Form.useForm();
+  const [formUpdate] = Form.useForm();
+  const userIdUpdateRef = useRef<number | null>(null);
   const [meta, setMeta] = useState({
     currentPage: 1,
     pageSize: 3,
@@ -320,47 +276,82 @@ const ManageUser: React.FC = () => {
     const json = await response.json();
     setListUser((prev) => [...prev, json.data]);
     setIsModalOpen(false);
-    form.resetFields();
+    formAdd.resetFields();
   };
 
   const handleUpdateUserSubmit = async (values: any) => {
+    const currentUserId = userIdUpdateRef.current;
+
     const response = await fetch(`http://localhost:8080/api/users`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...values, role: { roleId: values.role } }),
+      body: JSON.stringify({
+        ...values,
+        role: { roleId: values.role },
+        userId: currentUserId,
+      }),
     });
 
+    console.log(
+      JSON.stringify({
+        ...values,
+        role: { roleId: values.role },
+        userId: currentUserId,
+      })
+    );
+
     const json = await response.json();
+
     setListUser((prev) =>
       prev.map((user) => (user.userId === json.data.userId ? json.data : user))
     );
+    userIdUpdateRef.current = null;
     setIsModalUpdateOpen(false);
-    form.resetFields();
+    formUpdate.resetFields();
   };
 
   const handleUpdateUser = async (userId: number) => {
+    userIdUpdateRef.current = userId;
+    console.log(userIdUpdateRef);
+
     const response = await fetch(`http://localhost:8080/api/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
     });
     const json = await response.json();
-    setUserUpdate(json.data);
-    form.setFieldsValue(json.data);
+
+    formUpdate.setFieldsValue(json.data); // Set form values after fetching
+
     setIsModalUpdateOpen(true);
   };
 
   const deleteUser = async (userId: number) => {
-    await fetch(`http://localhost:8080/api/users/${userId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      },
-    });
-    setListUser((prev) => prev.filter((user) => user.userId !== userId));
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/users/${userId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorJson = await response.json();
+        toast.error(errorJson.message || "Failed to delete user");
+      }
+
+      const json = await response.json();
+      toast.success(json.message);
+      setListUser((prev) => prev.filter((user) => user.userId !== userId));
+    } catch (error) {
+      toast.error("An unknown error occurred");
+    }
   };
 
   const handleOnChange = (page: number, pageSize: number) => {
@@ -394,14 +385,18 @@ const ManageUser: React.FC = () => {
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleAddUser}
         listRole={listRole}
+        form={formAdd}
       />
 
       <UpdateUserModal
         visible={isModalUpdateOpen}
-        onClose={() => setIsModalUpdateOpen(false)}
+        onClose={() => {
+          setIsModalUpdateOpen(false);
+          formUpdate.resetFields();
+        }}
         onSubmit={handleUpdateUserSubmit}
-        user={userUpdate}
         listRole={listRole}
+        form={formUpdate}
       />
 
       <Table<User>
@@ -419,6 +414,7 @@ const ManageUser: React.FC = () => {
           pageSizeOptions: ["3", "6", "9", "12", "15"],
         }}
       >
+        <Column title="User ID" dataIndex="userId" key="userId" />
         <ColumnGroup title="Name">
           <Column title="First Name" dataIndex="firstName" key="firstName" />
           <Column title="Last Name" dataIndex="lastName" key="lastName" />

@@ -9,6 +9,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 const { Header, Sider } = Layout;
 
@@ -27,7 +28,7 @@ const App: React.FC = () => {
       "Content-Type": "application/json",
     });
     const account = {
-      username: "danglinh152",
+      username: "admin",
       password: "admin",
     };
 
@@ -64,6 +65,17 @@ const App: React.FC = () => {
 
   return (
     <Layout style={{ height: "98vh" }}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        style={{
+          marginTop: 60,
+        }}
+      />
+
       <Sider
         trigger={null}
         collapsible
