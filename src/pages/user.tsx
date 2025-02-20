@@ -295,14 +295,6 @@ const ManageUser: React.FC = () => {
       }),
     });
 
-    console.log(
-      JSON.stringify({
-        ...values,
-        role: { roleId: values.role },
-        userId: currentUserId,
-      })
-    );
-
     const json = await response.json();
 
     setListUser((prev) =>
@@ -344,13 +336,18 @@ const ManageUser: React.FC = () => {
       if (!response.ok) {
         const errorJson = await response.json();
         toast.error(errorJson.message || "Failed to delete user");
+      } else {
+        toast.success("User deleted successfully");
+        // Update the user list
+        setListUser((prev) => {
+          console.log("Previous Users:", prev);
+          console.log("Deleting User ID:", userId);
+          return prev.filter((user) => user.userId !== userId);
+        });
       }
-
-      const json = await response.json();
-      toast.success(json.message);
-      setListUser((prev) => prev.filter((user) => user.userId !== userId));
     } catch (error) {
       toast.error("An unknown error occurred");
+      console.error(error); // Log the error for debugging
     }
   };
 

@@ -16,7 +16,8 @@ import {
   PlusOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 const { Column, ColumnGroup } = Table;
 
@@ -195,6 +196,7 @@ const BookManager: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
   const [bookUpdate, setBookUpdate] = useState<Book | null>(null);
+  const bookIdUpdateRef = useRef<number | null>(null);
   const [meta, setMeta] = useState({
     currentPage: 1,
     pageSize: 5,
@@ -243,23 +245,40 @@ const BookManager: React.FC = () => {
   };
 
   const handleUpdateBookSubmit = async (values: Book) => {
-    const response = await fetch(`http://localhost:8080/api/books`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    });
+    const currentBookId = bookIdUpdateRef.current;
 
-    const json = await response.json();
-    setListBook((prev) =>
-      prev.map((book) => (book.bookId === json.data.bookId ? json.data : book))
-    );
-    setIsModalUpdateOpen(false);
+    try {
+      const response = await fetch(`http://localhost:8080/api/books`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...values,
+          bookId: currentBookId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const json = await response.json();
+      setListBook((prev) =>
+        prev.map((book) =>
+          book.bookId === json.data.bookId ? { ...json.data } : book
+        )
+      );
+      bookIdUpdateRef.current = null;
+      setIsModalUpdateOpen(false);
+    } catch (error) {
+      console.error("Error updating book:", error);
+    }
   };
 
   const handleUpdateBook = async (bookId: number) => {
+    bookIdUpdateRef.current = bookId;
     const response = await fetch(`http://localhost:8080/api/books/${bookId}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -271,15 +290,33 @@ const BookManager: React.FC = () => {
   };
 
   const deleteBook = async (bookId: number) => {
-    console.log(bookId);
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/books/${bookId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
 
-    await fetch(`http://localhost:8080/api/books/${bookId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      },
-    });
-    setListBook((prev) => prev.filter((book) => book.bookId !== bookId));
+      if (!response.ok) {
+        const errorJson = await response.json();
+        toast.error(errorJson.message || "Failed to delete book");
+      } else {
+        toast.success("Book deleted successfully");
+        // Update the Book list
+        setListBook((prev) => {
+          console.log("Previous Books:", prev);
+          console.log("Deleting Book ID:", bookId);
+          return prev.filter((book) => book.bookId !== bookId);
+        });
+      }
+    } catch (error) {
+      toast.error("An unknown error occurred");
+      console.error(error); // Log the error for debugging
+    }
   };
 
   const handleOnChange = (page: number, pageSize: number) => {
