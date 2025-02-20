@@ -236,6 +236,8 @@ const ManageUser: React.FC = () => {
       }
     );
     const json = await response.json();
+    console.log(json);
+    
     setListUser(json.data.data);
     setMeta({
       currentPage: json.data.meta.currentPage,

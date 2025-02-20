@@ -4,6 +4,7 @@ import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ManageUser from "./pages/user.tsx";
 import BookManager from "./pages/book.tsx";
+import OrderManager from "./pages/order.tsx";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         path: "/book",
         element: <BookManager />,
+      },
+      {
+        path: "/order",
+        element: <OrderManager />,
       },
     ],
   },
