@@ -173,6 +173,7 @@ const AddUserModal: React.FC<{
   </Modal>
 );
 
+
 const UpdateUserModal: React.FC<{
   visible: boolean;
   onClose: () => void;
@@ -181,6 +182,7 @@ const UpdateUserModal: React.FC<{
   form: any;
 }> = ({ visible, onClose, onSubmit, listRole, form }) => (
   <Modal title="Update User" open={visible} onCancel={onClose} footer={null}>
+    
     <Form onFinish={onSubmit} layout="vertical" form={form}>
       <Form.Item
         label="First Name"
@@ -234,19 +236,22 @@ const UpdateUserModal: React.FC<{
       >
         <Input />
       </Form.Item>
+      
       <Form.Item
         label="Role"
         name="role"
         style={{ marginBottom: 15 }}
         rules={[{ required: true }]}
       >
-        <Select>
+        
+        <Select value={listRole[0]?.roleId}>
           {listRole.map((item) => (
             <Select.Option key={item.roleId} value={item.roleId}>
               {item.roleName}
             </Select.Option>
           ))}
         </Select>
+
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
@@ -335,6 +340,7 @@ const ManageUser: React.FC = () => {
 
   const handleUpdateUserSubmit = async (values: any) => {
     const currentUserId = userIdUpdateRef.current;
+    
 
     const response = await fetch(`http://localhost:8080/api/users`, {
       method: "PUT",
