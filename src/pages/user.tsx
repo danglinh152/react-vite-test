@@ -10,6 +10,7 @@ import {
   Radio,
   Select,
   InputNumber,
+  Upload,
 } from "antd";
 import {
   DeleteOutlined,
@@ -36,6 +37,13 @@ interface Role {
   roleId: number;
   roleName: string;
 }
+
+const normFile = (e: any) => {
+  if (Array.isArray(e)) {
+    return e;
+  }
+  return e?.fileList;
+};
 
 const AddUserModal: React.FC<{
   visible: boolean;
@@ -110,6 +118,43 @@ const AddUserModal: React.FC<{
       >
         <Input.Password />
       </Form.Item>
+
+      <Form.Item
+        label="Avatar"
+        name="avatar"
+        valuePropName="fileList"
+        getValueFromEvent={normFile}
+      >
+        <Upload
+          customRequest={({ file, onSuccess }) => {
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("folder", "avatar"); // Default folder name
+
+            fetch("http://localhost:8080/api/upload", {
+              method: "POST",
+              body: formData,
+            })
+              .then((response) => {
+                if (response.ok) {
+                  if (onSuccess) {
+                    onSuccess(file);
+                  }
+                }
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+          }}
+          listType="picture-card"
+        >
+          <button style={{ border: 0, background: "none" }} type="button">
+            <PlusOutlined />
+            <div style={{ marginTop: 8 }}>Upload</div>
+          </button>
+        </Upload>
+      </Form.Item>
+
       <Form.Item
         label="Role"
         name="role"
@@ -153,6 +198,7 @@ const UpdateUserModal: React.FC<{
       >
         <Input />
       </Form.Item>
+
       <Form.Item
         label="Gender"
         name="gender"
@@ -264,13 +310,19 @@ const ManageUser: React.FC = () => {
   }, []);
 
   const handleAddUser = async (values: any) => {
+    const newValues = {
+      ...values,
+      avatar: values.avatar[0].name,
+      role: { roleId: values.role },
+    };
+
     const response = await fetch(`http://localhost:8080/api/users`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...values, role: { roleId: values.role } }),
+      body: JSON.stringify(newValues),
     });
 
     const json = await response.json();
@@ -307,7 +359,6 @@ const ManageUser: React.FC = () => {
 
   const handleUpdateUser = async (userId: number) => {
     userIdUpdateRef.current = userId;
-    console.log(userIdUpdateRef);
 
     const response = await fetch(`http://localhost:8080/api/users/${userId}`, {
       headers: {
@@ -416,6 +467,18 @@ const ManageUser: React.FC = () => {
           <Column title="First Name" dataIndex="firstName" key="firstName" />
           <Column title="Last Name" dataIndex="lastName" key="lastName" />
         </ColumnGroup>
+        <Column
+          title="Avatar"
+          dataIndex="avatar"
+          key="avatar"
+          render={(text) => (
+            <img
+              src={`http://localhost:8080/storage/upload/${text}`}
+              alt="Avatar"
+              style={{ width: 50, height: 50, borderRadius: "50%" }} // Thay đổi kích thước và hình dáng nếu cần
+            />
+          )}
+        />
         <Column
           title="Email"
           dataIndex="email"

@@ -10,6 +10,7 @@ import {
   Radio,
   Select,
   InputNumber,
+  Upload,
 } from "antd";
 import {
   DeleteOutlined,
@@ -32,6 +33,13 @@ interface Book {
   quantity: number;
 }
 
+const normFile = (e: any) => {
+  if (Array.isArray(e)) {
+    return e;
+  }
+  return e?.fileList;
+};
+
 const AddBookModal: React.FC<{
   visible: boolean;
   onClose: () => void;
@@ -46,6 +54,36 @@ const AddBookModal: React.FC<{
         style={{ marginBottom: 5 }}
       >
         <Input />
+      </Form.Item>
+      <Form.Item
+        label="Image"
+        name="image"
+        valuePropName="fileList"
+        getValueFromEvent={normFile}
+      >
+        <Upload
+          customRequest={({ file, onSuccess }) => {
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("folder", "image"); // Default folder name
+
+            fetch("http://localhost:8080/api/upload", {
+              method: "POST",
+              body: formData,
+            })
+              .then((response) => {
+                if (response.ok) {
+                  if (onSuccess) {
+                    onSuccess(file);
+                  }
+                }
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+          }}
+          listType="picture-card"
+        ></Upload>
       </Form.Item>
       <Form.Item
         label="Author"
@@ -374,6 +412,18 @@ const BookManager: React.FC = () => {
         }}
       >
         <Column title="Title" dataIndex="title" key="title" />
+        <Column
+          title="Image"
+          dataIndex="image"
+          key="image"
+          render={(text) => (
+            <img
+              src={`http://localhost:8080/storage/upload/${text}`}
+              alt="Image"
+              style={{ width: 50, height: 50, borderRadius: "50%" }} // Thay đổi kích thước và hình dáng nếu cần
+            />
+          )}
+        />
         <Column title="Author" dataIndex="author" key="author" />
         <Column title="ISBN" dataIndex="isbn" key="isbn" />
         <Column title="Avg Rate" dataIndex="avgRate" key="avgRate" />
