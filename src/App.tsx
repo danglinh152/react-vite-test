@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   BookOutlined,
   CalculatorOutlined,
+  DiffOutlined,
   HomeOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -58,6 +59,9 @@ const App: React.FC = () => {
       case "/book":
         setCurrPage(2);
         break;
+      case "/order":
+        setCurrPage(3);
+        break;
       default:
         setCurrPage(1);
     }
@@ -95,6 +99,9 @@ const App: React.FC = () => {
 
           <Menu.Item key="2" icon={<BookOutlined />}>
             <Link to="/book">Book</Link>
+          </Menu.Item>
+          <Menu.Item key="3" icon={<DiffOutlined />}>
+            <Link to="/order">Order</Link>
           </Menu.Item>
         </Menu>
       </Sider>
