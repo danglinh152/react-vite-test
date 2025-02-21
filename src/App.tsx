@@ -1,57 +1,62 @@
 import React, { useState, useEffect } from "react";
 import {
   BookOutlined,
-  CalculatorOutlined,
   DiffOutlined,
   HomeOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  OrderedListOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
-import { Button, Layout, Menu, theme } from "antd";
+import { Button, Dropdown, Layout, Menu, MenuProps, theme } from "antd";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 const { Header, Sider } = Layout;
 
+interface User {
+  firstName: string;
+  lastName: string;
+}
+
 const App: React.FC = () => {
+  const [user, setUser] = useState<User | null>(null);
   const [collapsed, setCollapsed] = useState(false);
   const [currPage, setCurrPage] = useState<number>(1);
-  const location = useLocation(); // Get the current location
+  const location = useLocation();
 
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const Login = async () => {
-    const url = "http://localhost:8080/auth/sign-in"; // Your API endpoint
-    const headers = new Headers({
-      "Content-Type": "application/json",
-    });
-    const account = {
-      username: "admin",
-      password: "admin",
-    };
-
+  const getAccount = async (): Promise<void> => {
     try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers,
-        body: JSON.stringify(account),
+      const response = await fetch(`http://localhost:8080/auth/get-account`, {
+        method: "GET", // Đảm bảo phương thức là GET
+        credentials: "include", // Gửi cookie tự động
       });
+
       if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
+        const errorMessage = await response.text();
+        throw new Error(
+          `Response status: ${response.status}, Message: ${errorMessage}`
+        );
       }
+
       const json = await response.json();
-      localStorage.setItem("access_token", json.data.access_token);
+      const newObject = {
+        firstName: json.data.firstName,
+        lastName: json.data.lastName,
+      };
+
+      setUser(newObject);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching account:", error);
     }
   };
 
   useEffect(() => {
-    Login();
-    // Set current page based on the URL
+    getAccount();
+
     switch (location.pathname) {
       case "/":
         setCurrPage(1);
@@ -66,6 +71,19 @@ const App: React.FC = () => {
         setCurrPage(1);
     }
   }, [location]);
+
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label:
+        (user?.firstName ?? "") + " " + (user?.lastName ?? "") ||
+        "Chưa Đăng Nhập",
+      disabled: false,
+    },
+    {
+      type: "divider",
+    },
+  ];
 
   return (
     <Layout style={{ height: "98vh" }}>
@@ -90,13 +108,12 @@ const App: React.FC = () => {
         <Menu
           theme="dark"
           mode="inline"
-          selectedKeys={[currPage.toString()]} // Highlight the current page
+          selectedKeys={[currPage.toString()]}
           style={{ borderRadius: "15px" }}
         >
           <Menu.Item key="1" icon={<HomeOutlined />}>
             <Link to="/">Home</Link>
           </Menu.Item>
-
           <Menu.Item key="2" icon={<BookOutlined />}>
             <Link to="/book">Book</Link>
           </Menu.Item>
@@ -106,13 +123,29 @@ const App: React.FC = () => {
         </Menu>
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
+        <Header
+          style={{
+            padding: 0,
+            background: colorBgContainer,
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
           <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
             style={{ fontSize: "16px", width: 64, height: 64 }}
           />
+          <Dropdown menu={{ items }}>
+            <a onClick={(e) => e.preventDefault()}>
+              <Button
+                type="text"
+                icon={<UserOutlined />}
+                style={{ fontSize: "16px", width: 64, height: 64 }}
+              />
+            </a>
+          </Dropdown>
         </Header>
 
         <div
