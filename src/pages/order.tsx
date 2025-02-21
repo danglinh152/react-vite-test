@@ -27,8 +27,9 @@ interface Order {
   shippingAddress: string;
   productCost: number;
   paymentCost: number;
-  total: number  ;
+  total: number;
   createdBy:string;
+  status: string;
 }
 
 const AddOrderModal: React.FC<{
@@ -239,6 +240,7 @@ const AddOrderModal: React.FC<{
                  <Column title="Payment Cost" dataIndex="paymentCost" key="paymentCost" />
                </ColumnGroup>
                <Column title="Total" dataIndex="total" key="total" />
+               <Column title="Status" dataIndex="status" key="status" />
 
               
                <Column
