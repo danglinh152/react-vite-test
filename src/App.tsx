@@ -28,6 +28,27 @@ const App: React.FC = () => {
     token: { colorBgContainer },
   } = theme.useToken();
 
+  const refreshToken = async (): Promise<void> => {
+    try {
+      const response = await fetch(`http://localhost:8080/auth/refresh`, {
+        method: "GET", // Đảm bảo phương thức là GET
+        credentials: "include", // Gửi cookie tự động
+      });
+
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(
+          `Response status: ${response.status}, Message: ${errorMessage}`
+        );
+      }
+
+      const json = await response.json();
+      localStorage.setItem("access_token", json.data.access_token);
+    } catch (error) {
+      console.error("Error fetching account:", error);
+    }
+  };
+
   const getAccount = async (): Promise<void> => {
     try {
       const response = await fetch(`http://localhost:8080/auth/get-account`, {
@@ -56,6 +77,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     getAccount();
+    refreshToken();
 
     switch (location.pathname) {
       case "/":
