@@ -14,12 +14,15 @@ import {
   } from "antd";
   import {
     DeleteOutlined,
+    FileExclamationOutlined,
+    FileProtectOutlined,
+    FileSyncOutlined,
     PlusOutlined,
     UploadOutlined,
   } from "@ant-design/icons";
   import { useEffect, useRef, useState } from "react";
   import { toast } from "react-toastify";
-
+  const { Option } = Select;
 interface Order {
   orderId: number;
   date: Date;
@@ -97,13 +100,53 @@ const AddOrderModal: React.FC<{
   </Modal>
 );
 
+const UpdateOrderModal: React.FC<{
+  visible: boolean;
+  onClose: () => void;
+  onSubmit: (values: any) => void;
+  form: any;
+}> = ({ visible, onClose, onSubmit, form }) => (
+  <Modal title="Update Order" open={visible} onCancel={onClose} footer={null}>
+    
+    <Form onFinish={onSubmit} layout="vertical" form={form}>
+      
+      {/* <Form.Item
+        label="Status"
+        name="status"
+        style={{ marginBottom: 5 }}
+        rules={[{ required: true }]}
+      >
+        <Radio.Group>
+          <Radio value="PENDING">PENDING </Radio>
+          <Radio value="PROCESSING">PROCESSING </Radio>
+          <Radio value="DELIVERED">DELIVERED </Radio>
+        </Radio.Group>
+      </Form.Item> */}
+       <Form.Item
+        label="productCost"
+        name="productCost"
+        style={{ marginBottom: 5 }}
+        rules={[{ required: true }]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Update Order
+        </Button>
+      </Form.Item>
+    </Form>
+  </Modal>
+);
+
   const OrderManager: React.FC = () => {
     const [listOrder, setListOrder] = useState<Order[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
     const [formAdd] = Form.useForm();
     const [formUpdate] = Form.useForm();
-
+    const orderIdUpdateRef = useRef<number | null>(null);
     const { Column, ColumnGroup } = Table;
     const [meta, setMeta] = useState({
       currentPage: 1,
@@ -135,7 +178,7 @@ const AddOrderModal: React.FC<{
         fetchOrder();
       }, [meta.currentPage, meta.pageSize]);
     
-    const handleAddUser = async (values: any) => {
+    const handleAddOrder = async (values: any) => {
         const response = await fetch(`http://localhost:8080/api/orders`, {
           method: "POST",
           headers: {
@@ -159,6 +202,49 @@ const AddOrderModal: React.FC<{
           total: meta.total,
         });
       };
+
+      const handleUpdateOrderSubmit = async (values: any) => {
+        const currentOrderId = orderIdUpdateRef.current;
+        
+    
+        const response = await fetch(`http://localhost:8080/api/orders`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...values,
+            orderId: currentOrderId
+          }),
+        });
+    
+        const json = await response.json();
+    
+        setListOrder((prev) =>
+          prev.map((order) => (order.orderId === json.data.orderId ? json.data : order))
+        );
+        orderIdUpdateRef.current = null;
+        setIsModalUpdateOpen(false);
+        formUpdate.resetFields();
+      };
+    
+
+      const handleUpdateOrder = async (orderId: number) => {
+        orderIdUpdateRef.current = orderId;
+    
+        const response = await fetch(`http://localhost:8080/api/orders/${orderId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        });
+        const json = await response.json();
+    
+        formUpdate.setFieldsValue(json.data); // Set form values after fetching
+    
+        setIsModalUpdateOpen(true);
+      };
+
       const deleteOrder = async (orderId: number) => {
         try {
           const response = await fetch(
@@ -176,7 +262,6 @@ const AddOrderModal: React.FC<{
             toast.error(errorJson.message || "Failed to delete order");
           } else {
             toast.success("Order deleted successfully");
-            // Update the user list
             setListOrder((prev) => {
               console.log("Previous Orders:", prev);
               console.log("Deleting Order ID:", orderId);
@@ -189,6 +274,20 @@ const AddOrderModal: React.FC<{
         }
       };
     
+      const getStatusIcon = (status:string) => {
+        switch (status) {
+          case "PENDING":
+            return <FileExclamationOutlined />;
+          case "PROCESSING":
+            return <FileSyncOutlined />;
+          case "DELIVERED":
+            return <FileProtectOutlined />;
+          default:
+            return null;
+        }
+      };
+ 
+
     return(
           <div>
              <div
@@ -209,14 +308,23 @@ const AddOrderModal: React.FC<{
              <AddOrderModal
                visible={isModalOpen}
                onClose={() => setIsModalOpen(false)}
-               onSubmit={handleAddUser}
+               onSubmit={handleAddOrder}
                form={formAdd}
              />
-       
+            <UpdateOrderModal
+                visible={isModalUpdateOpen}
+                onClose={() => {
+                setIsModalUpdateOpen(false);
+                formUpdate.resetFields();
+                }}
+                onSubmit={handleUpdateOrderSubmit}
+                form={formUpdate}
+            />
+
             
              <Table<Order>
                dataSource={listOrder}
-               rowKey="userId"
+               rowKey="orderId"
                pagination={{
                  current: meta.currentPage,
                  pageSize: meta.pageSize,
@@ -240,16 +348,22 @@ const AddOrderModal: React.FC<{
                  <Column title="Payment Cost" dataIndex="paymentCost" key="paymentCost" />
                </ColumnGroup>
                <Column title="Total" dataIndex="total" key="total" />
-               <Column title="Status" dataIndex="status" key="status" />
-
-              
+               <Column
+                    render={(text, record) => (
+                    <Space size="middle">
+                        <Button icon={getStatusIcon(record.status)} >
+                        </Button>
+                    </Space>
+                    
+                )} 
+               title="Status" dataIndex="status" key="status" />           
                <Column
                  title="Action"
                  key="action"
                  render={(text, record) => (
                    <Space size="middle">
                      <Popconfirm
-                       title="Are you sure to delete this user?"
+                       title="Are you sure to delete this order?"
                        onConfirm={() => deleteOrder(record.orderId)}
                        okText="Yes"
                        cancelText="No"
@@ -258,6 +372,14 @@ const AddOrderModal: React.FC<{
                          Delete
                        </Button>
                      </Popconfirm>
+                     <Button
+                        type="primary"
+                        icon={<UploadOutlined />}
+                        onClick={() => handleUpdateOrder(record.orderId)}
+                    >
+                        Update
+                    </Button>
+                    
                    </Space>
                  )}
                />

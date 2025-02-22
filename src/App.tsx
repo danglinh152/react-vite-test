@@ -3,6 +3,7 @@ import {
   BookOutlined,
   DiffOutlined,
   HomeOutlined,
+  LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
@@ -94,6 +95,29 @@ const App: React.FC = () => {
     }
   }, [location]);
 
+  const handleLogout = async () => {
+    try {  
+      const response = await fetch("http://localhost:8080/auth/sign-out", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`, // Gửi token để xác thực
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error("Lỗi khi logout");
+      }
+      
+      localStorage.removeItem("access_token");
+
+      window.location.replace("/login"); // Chuyển hướng về trang login
+    } catch (error) {
+      console.error("Lỗi khi logout:", error);
+    }
+  };
+  
+
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -104,6 +128,12 @@ const App: React.FC = () => {
     },
     {
       type: "divider",
+    },
+    {
+      key: "logout",
+      icon: <LogoutOutlined />,
+      label: "Logout",
+      onClick: handleLogout
     },
   ];
 
