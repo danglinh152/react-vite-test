@@ -1,5 +1,5 @@
-import FormLogin from "../components/formLogin";
+import AuthPage from "../components/authPage";
 
-const Login: React.FC = () => <FormLogin />;
+const Login: React.FC = () => <AuthPage />;
 
 export default Login;

@@ -6,6 +6,7 @@ import ManageUser from "./pages/user.tsx";
 import BookManager from "./pages/book.tsx";
 import OrderManager from "./pages/order.tsx";
 import Login from "./pages/login.tsx"; // Ensure you import the Login component
+import AuthPage from "./components/authPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -27,8 +28,8 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/login", // Define /login as a separate route
-    element: <Login />,
+    path: "/auth",
+    element: <AuthPage />,
   },
 ]);
 
