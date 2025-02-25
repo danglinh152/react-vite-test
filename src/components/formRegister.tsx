@@ -49,6 +49,9 @@ const RegisterChildren = () => {
   
         if (!response.ok) {
           const errorJson = await response.json();
+          if(errorJson){
+            
+          }
           console.log(errorJson.message)
           toast.error(errorJson.message || "Registration failed");
         }else{
