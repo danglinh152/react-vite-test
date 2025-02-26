@@ -1,12 +1,13 @@
-import { App } from "antd";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import ManageUser from "../pages/User";
-import BookManager from "../pages/Book";
-import OrderManager from "../pages/Order";
-import AuthPage from "../pages/authPage";
+import ManageUser from "../pages/Admin/User";
+import BookManager from "../pages/Admin/Book";
+import OrderManager from "../pages/Admin/Order";
 import { useAuth } from "../provider/authProvider";
 import { ProtectedRoute } from "./ProtectedRoute";
 import Home from "../pages/Home";
+import AuthPage from "../pages/Auth/AuthPage";
+import Adventure from "../pages/Adventure";
+import About from "../pages/About";
 
 const Routes = () => {
   const { token } = useAuth();
@@ -15,11 +16,22 @@ const Routes = () => {
   const routesForPublic = [
     {
       path: "/",
+      // element: <LayoutAdmin />,
       element: <Home />,
-    },
-    {
-      path: "/about-us",
-      element: <div>About Us</div>,
+      children: [
+        // {
+        //   index: true,
+        //   element: <Home />,
+        // },
+        {
+          path: "adventure", // Remove the leading slash for child routes
+          element: <Adventure />,
+        },
+        {
+          path: "about-us", // Remove the leading slash for child routes
+          element: <About />,
+        },
+      ],
     },
     {
       path: "/auth",
@@ -31,7 +43,7 @@ const Routes = () => {
   const routesForAuthenticatedOnly = [
     {
       path: "/admin",
-      // element: <App />,
+      // element: <LayoutAdmin />,
       element: <ProtectedRoute />,
       children: [
         {

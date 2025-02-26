@@ -1,8 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
 import AuthProvider from "./provider/authProvider.tsx";
 import Routes from "./routes/index.tsx";
+import "./index.css";
 // import { createBrowserRouter, RouterProvider } from "react-router-dom";
 // import ManageUser from "./pages/user.tsx";
 // import BookManager from "./pages/book.tsx";
@@ -13,7 +13,7 @@ import Routes from "./routes/index.tsx";
 // const router = createBrowserRouter([
 //   {
 //     path: "/",
-//     element: <App />,
+//     element: <LayoutAdmin />,
 //     children: [
 //       {
 //         index: true,

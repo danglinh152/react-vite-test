@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Button, Form, Input, InputNumber, Radio, Tabs } from "antd";
 import { LoginOutlined, UserAddOutlined } from "@ant-design/icons";
 import { toast, ToastContainer } from "react-toastify";
-import RegisterChildren from "../components/formRegister";
-import LoginChildren from "../components/formLogin";
-import Loader from "../components/loader";
+import LoginChildren from "../../components/auth/formLogin";
 import { useLocation } from "react-router-dom";
+import RegisterChildren from "../../components/auth/formRegister";
+import Loader from "../../components/Loader";
 
 const AuthPage: React.FC = () => {
   const location = useLocation();

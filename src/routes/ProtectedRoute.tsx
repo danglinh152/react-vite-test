@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../provider/authProvider";
 import { toast } from "react-toastify"; // Import ToastMessage
-import App from "../App";
+import LayoutAdmin from "../pages/Admin/LayoutAdmin";
 
 export const ProtectedRoute = () => {
   const { token } = useAuth();
@@ -16,5 +16,5 @@ export const ProtectedRoute = () => {
   }
 
   // Nếu đã xác thực, render các route con
-  return <App />;
+  return <LayoutAdmin />;
 };

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import type { FormProps } from "antd";
 import { Button, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../provider/authProvider";
+import { useAuth } from "../../provider/authProvider";
 import { ToastContainer } from "react-toastify";
 
 type FieldType = {
