@@ -11,6 +11,7 @@ import {
 import { Button, Dropdown, Layout, Menu, MenuProps, theme } from "antd";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { useAuth } from "./provider/authProvider";
 
 const { Header, Sider } = Layout;
 
@@ -20,7 +21,7 @@ interface User {
 }
 
 const App: React.FC = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [collapsed, setCollapsed] = useState(false);
   const [currPage, setCurrPage] = useState<number>(1);
@@ -82,13 +83,13 @@ const App: React.FC = () => {
     refreshToken();
 
     switch (location.pathname) {
-      case "/":
+      case "/admin/":
         setCurrPage(1);
         break;
-      case "/book":
+      case "/admin/book":
         setCurrPage(2);
         break;
-      case "/order":
+      case "/admin/order":
         setCurrPage(3);
         break;
       default:
@@ -97,7 +98,7 @@ const App: React.FC = () => {
   }, [location]);
 
   const handleLogout = async () => {
-    try {  
+    try {
       const response = await fetch("http://localhost:8080/auth/sign-out", {
         method: "POST",
         headers: {
@@ -105,11 +106,11 @@ const App: React.FC = () => {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`, // Gửi token để xác thực
         },
       });
-  
+
       if (!response.ok) {
         throw new Error("Lỗi khi logout");
       }
-      
+
       localStorage.removeItem("access_token");
 
       navigate("/auth");
@@ -117,7 +118,6 @@ const App: React.FC = () => {
       console.error("Lỗi khi logout:", error);
     }
   };
-  
 
   const items: MenuProps["items"] = [
     {
@@ -134,7 +134,7 @@ const App: React.FC = () => {
       key: "logout",
       icon: <LogoutOutlined />,
       label: "Logout",
-      onClick: handleLogout
+      onClick: handleLogout,
     },
   ];
 
@@ -165,13 +165,13 @@ const App: React.FC = () => {
           style={{ borderRadius: "15px" }}
         >
           <Menu.Item key="1" icon={<HomeOutlined />}>
-            <Link to="/">Home</Link>
+            <Link to="/admin/">Home</Link>
           </Menu.Item>
           <Menu.Item key="2" icon={<BookOutlined />}>
-            <Link to="/book">Book</Link>
+            <Link to="/admin/book">Book</Link>
           </Menu.Item>
           <Menu.Item key="3" icon={<DiffOutlined />}>
-            <Link to="/order">Order</Link>
+            <Link to="/admin/order">Order</Link>
           </Menu.Item>
         </Menu>
       </Sider>

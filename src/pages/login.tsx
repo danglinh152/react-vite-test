@@ -1,4 +1,4 @@
-import AuthPage from "../components/authPage";
+import AuthPage from "./authPage";
 
 const Login: React.FC = () => <AuthPage />;
 
