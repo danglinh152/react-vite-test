@@ -9,7 +9,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { Button, Dropdown, Layout, Menu, MenuProps, theme } from "antd";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 const { Header, Sider } = Layout;
@@ -20,6 +20,7 @@ interface User {
 }
 
 const App: React.FC = () => {
+  const navigate = useNavigate(); 
   const [user, setUser] = useState<User | null>(null);
   const [collapsed, setCollapsed] = useState(false);
   const [currPage, setCurrPage] = useState<number>(1);
@@ -111,7 +112,7 @@ const App: React.FC = () => {
       
       localStorage.removeItem("access_token");
 
-      window.location.replace("/login"); // Chuyển hướng về trang login
+      navigate("/auth");
     } catch (error) {
       console.error("Lỗi khi logout:", error);
     }

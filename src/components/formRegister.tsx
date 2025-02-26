@@ -49,11 +49,15 @@ const RegisterChildren = () => {
   
         if (!response.ok) {
           const errorJson = await response.json();
-          if(errorJson){
-            
+          if(errorJson.message.length == 1){
+            console.log(errorJson.message)
+          toast.error(errorJson.message[0] || "Registration failed");
           }
+        else{
           console.log(errorJson.message)
-          toast.error(errorJson.message || "Registration failed");
+          toast.error(errorJson.message.join(" ") || "Registration failed");
+        }
+        
         }else{
             const json = await response.json();
             setListUser((prev) => [...prev, json.data]);

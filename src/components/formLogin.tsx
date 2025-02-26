@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { FormProps } from "antd";
 import { Button, Form, Input, InputNumber, Radio, Tabs } from "antd";
 import Loader from "./loader";
@@ -9,6 +9,7 @@ import {
 
 import { toast, ToastContainer } from "react-toastify";
 import RegisterChildren from "./formRegister";
+import { useNavigate } from "react-router-dom";
 
 type FieldType = {
   username: string;
@@ -27,39 +28,60 @@ interface User {
   role: { roleId: number };
 }
 
-const Login = async (username: string, password: string) => {
-  const url = "http://localhost:8080/auth/sign-in"; // Your API endpoint
-  const headers = new Headers({
-    "Content-Type": "application/json",
-  });
 
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({ username: username, password: password }),
-      credentials: "include", // Include credentials (cookies)
-    });
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
-    const json = await response.json();
-    window.location.replace("/");
-    console.log("dang nhap thanh cong", json);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-  Login(values.username, values.password);
-};
-
-const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
-  console.log("Failed:", errorInfo);
-};
 
 const LoginChildren = () => {
+  const [token, setToken] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  // Kiểm tra token sau khi đăng nhập thành công
+  useEffect(() => {
+    const tokenFromStorage = localStorage.getItem("access_token");
+    if (tokenFromStorage) {
+      setToken(tokenFromStorage);
+      console.log("dm");
+      
+    }
+  }, [token]);
+
+  const Login = async (username: string, password: string, navigate: (path: string) => void) => {
+    const url = "http://localhost:8080/auth/sign-in";
+    
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+        credentials: "include", // Include credentials (cookies)
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+  
+      const json = await response.json();
+      console.log("Đăng nhập thành công", json);
+  
+      // Lưu token vào localStorage hoặc sessionStorage
+      localStorage.setItem("access_token", json.access_token);
+      setToken(json.access_token);
+      // Điều hướng đến /user
+      navigate("/")
+    } catch (error) {
+      console.log("Lỗi đăng nhập:", error);
+    }
+  };
+
+  const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
+    Login(values.username, values.password, navigate);
+  };
+  
+    
+  const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
   return (
     <Form
     name="basic"
