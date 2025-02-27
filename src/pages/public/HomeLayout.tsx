@@ -4,7 +4,7 @@ import { Link, Outlet, useLocation } from "react-router-dom"; // Import useLocat
 
 const { Header, Content, Footer } = Layout;
 
-const Home: React.FC = () => {
+const HomeLayout: React.FC = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -64,7 +64,6 @@ const Home: React.FC = () => {
       <Content style={{ padding: "0 20px", height: "100vh", margin: "20px 0" }}>
         <div
           style={{
-            padding: 24,
             minHeight: "75vh",
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
@@ -90,4 +89,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default HomeLayout;

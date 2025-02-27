@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../provider/authProvider";
 import { toast } from "react-toastify"; // Import ToastMessage
-import LayoutAdmin from "../pages/Admin/LayoutAdmin";
+import LayoutAdmin from "../pages/admin/LayoutAdmin";
 
 export const ProtectedRoute = () => {
   const { token } = useAuth();

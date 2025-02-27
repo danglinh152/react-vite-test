@@ -1,13 +1,14 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import ManageUser from "../pages/Admin/User";
-import BookManager from "../pages/Admin/Book";
-import OrderManager from "../pages/Admin/Order";
+import ManageUser from "../pages/admin/User";
+import BookManager from "../pages/admin/Book";
+import OrderManager from "../pages/admin/Order";
 import { useAuth } from "../provider/authProvider";
 import { ProtectedRoute } from "./ProtectedRoute";
-import Home from "../pages/Home";
-import AuthPage from "../pages/Auth/AuthPage";
-import Adventure from "../pages/Adventure";
-import About from "../pages/About";
+import AuthPage from "../pages/auth/AuthPage";
+import Adventure from "../pages/public/Adventure";
+import About from "../pages/public/About";
+import HomeLayout from "../pages/public/HomeLayout";
+import Home from "../pages/public/Home";
 
 const Routes = () => {
   const { token } = useAuth();
@@ -17,12 +18,12 @@ const Routes = () => {
     {
       path: "/",
       // element: <LayoutAdmin />,
-      element: <Home />,
+      element: <HomeLayout />,
       children: [
-        // {
-        //   index: true,
-        //   element: <Home />,
-        // },
+        {
+          index: true,
+          element: <Home />,
+        },
         {
           path: "adventure", // Remove the leading slash for child routes
           element: <Adventure />,
