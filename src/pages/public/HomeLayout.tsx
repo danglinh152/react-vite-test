@@ -5,10 +5,6 @@ import { Link, Outlet, useLocation } from "react-router-dom"; // Import useLocat
 const { Header, Content, Footer } = Layout;
 
 const HomeLayout: React.FC = () => {
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
-
   const location = useLocation(); // Use useLocation to get the current pathname
 
   // Use state to track the selected tab
@@ -63,17 +59,17 @@ const HomeLayout: React.FC = () => {
       </Header>
       <Content
         style={{
-          padding: "0 20px",
-          height: "100vh",
-          margin: "20px 0",
+          minHeight: "100vh",
+          padding: "20px 0",
         }}
       >
         <div
           style={{
-            minHeight: "100%",
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-            backgroundColor: "yellow",
+            minHeight: "100vh",
+            // borderRadius: "20px",
+            backgroundColor: "#f0f0f0",
+            padding: "0 100px",
+            // backgroundColor: "red",
           }}
         >
           <Outlet />
@@ -82,9 +78,6 @@ const HomeLayout: React.FC = () => {
       <Footer
         style={{
           borderTop: "1px solid #e8e8e8",
-          position: "fixed",
-          left: 0,
-          bottom: 0,
           width: "100%",
           backgroundColor: "white",
           textAlign: "center",
