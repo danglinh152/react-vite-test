@@ -22,11 +22,32 @@ export default function Slider() {
         pagination={{ clickable: true }} // Make pagination clickable
         modules={[Pagination]} // Include Pagination module
         className="mySwiper"
+        style={{ width:"64%" }}
       >
-        <SwiperSlide style={{ backgroundColor: "red" }}>Slide 1</SwiperSlide>
-        <SwiperSlide style={{ backgroundColor: "red" }}>Slide 1</SwiperSlide>
-        <SwiperSlide style={{ backgroundColor: "red" }}>Slide 1</SwiperSlide>
-        <SwiperSlide style={{ backgroundColor: "red" }}>Slide 1</SwiperSlide>
+        <SwiperSlide  style={{
+                 backgroundImage: `url("http://localhost:8080/storage/avatar/MCBooks_KCt3_840x320.png")`,
+                 backgroundSize: "contain", // Fit ảnh trong khung
+                 backgroundRepeat: "no-repeat",
+                 backgroundPosition: "center",
+                 minHeight: "200px",
+              }}></SwiperSlide>
+        <SwiperSlide  style={{
+          backgroundImage: `url("http://localhost:8080/storage/avatar/Screenshot_2025-02-28_141857.jpg")`,
+          backgroundSize: "contain", // Fit ảnh trong khung
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          minHeight: "200px",
+          
+        }}></SwiperSlide>
+              <SwiperSlide  style={{
+          backgroundImage: `url("http://localhost:8080/storage/avatar/MCBooks_KCt3_840x320.png")`,
+          backgroundSize: "contain", // Fit ảnh trong khung
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          minHeight: "200px",
+          
+          
+        }}></SwiperSlide>
       </Swiper>
     </>
   );

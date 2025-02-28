@@ -1,19 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { Breadcrumb, Layout, Menu, theme } from "antd";
+import { Breadcrumb, Button, Layout, Menu, theme } from "antd";
 import { Link, Outlet, useLocation } from "react-router-dom"; // Import useLocation from react-router-dom
+import { Input} from 'antd';
+import type { GetProps } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 
 const { Header, Content, Footer } = Layout;
+type SearchProps = GetProps<typeof Input.Search>;
+
+const { Search } = Input;
+
+const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
 
 const HomeLayout: React.FC = () => {
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
-
+  // const {
+  //   token: { colorBgContainer, borderRadiusLG },
+  // } = theme.useToken();
   const location = useLocation(); // Use useLocation to get the current pathname
 
   // Use state to track the selected tab
   const [selectedKey, setSelectedKey] = useState(1);
-
   // Effect to update selectedKey based on current path
   useEffect(() => {
     switch (location.pathname) {
@@ -60,21 +67,23 @@ const HomeLayout: React.FC = () => {
             <Link to="/about-us">Về Chúng Tôi</Link>
           </Menu.Item>
         </Menu>
-      </Header>
+        <Search style={{ maxWidth:250 }} placeholder="Tìm kiếm..." onSearch={onSearch} enterButton />
+          <FontAwesomeIcon style={{ color:"white", fontSize:25, margin:12 }} icon={faCartPlus} />
+        </Header>
       <Content
-        style={{
-          padding: "0 20px",
-          height: "100vh",
-          margin: "20px 0",
-        }}
+        // style={{
+        //   padding: "0 20px",
+        //   minHeight: "100vh",
+        //   margin: "20px 0",
+        // }}
       >
         <div
-          style={{
-            minHeight: "100%",
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-            backgroundColor: "yellow",
-          }}
+          // style={{
+          //   minHeight: "100vh",
+          //   background: colorBgContainer,
+          //   borderRadius: borderRadiusLG,
+          //   backgroundColor: "yellow",
+          // }}
         >
           <Outlet />
         </div>
