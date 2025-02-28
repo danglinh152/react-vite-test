@@ -61,12 +61,19 @@ const HomeLayout: React.FC = () => {
           </Menu.Item>
         </Menu>
       </Header>
-      <Content style={{ padding: "0 20px", height: "100vh", margin: "20px 0" }}>
+      <Content
+        style={{
+          padding: "0 20px",
+          height: "100vh",
+          margin: "20px 0",
+        }}
+      >
         <div
           style={{
-            minHeight: "75vh",
+            minHeight: "100%",
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
+            backgroundColor: "yellow",
           }}
         >
           <Outlet />
