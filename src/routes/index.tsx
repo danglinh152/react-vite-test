@@ -9,6 +9,7 @@ import Adventure from "../pages/public/Adventure";
 import About from "../pages/public/About";
 import HomeLayout from "../pages/public/HomeLayout";
 import Home from "../pages/public/Home";
+import Detail from "../pages/public/Detail";
 
 const Routes = () => {
   const { token } = useAuth();
@@ -31,6 +32,10 @@ const Routes = () => {
         {
           path: "about-us", // Remove the leading slash for child routes
           element: <About />,
+        },
+        {
+          path: "/detail/:id",
+          element: <Detail />,
         },
       ],
     },
