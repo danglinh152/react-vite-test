@@ -22,7 +22,7 @@ export default function Slider() {
         pagination={{ clickable: true }} // Make pagination clickable
         modules={[Pagination]} // Include Pagination module
         className="mySwiper"
-        style={{ width:"64%" }}
+        style={{ width:"65%",paddingRight:20 }}
       >
         <SwiperSlide  style={{
                  backgroundImage: `url("http://localhost:8080/storage/avatar/MCBooks_KCt3_840x320.png")`,

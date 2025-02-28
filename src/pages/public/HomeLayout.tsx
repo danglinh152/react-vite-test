@@ -159,7 +159,7 @@ const HomeLayout: React.FC = () => {
         </div>
       </Header>
       <Content style={{ minHeight: "100vh", padding: "20px 0" }}>
-        <div style={{ minHeight: "100vh", backgroundColor: "#f0f0f0", padding: "0 100px" }}>
+        <div style={{ minHeight: "100vh", backgroundColor: "#f0f0f0",paddingLeft:50,paddingRight:50}}>
           <Outlet />
         </div>
       </Content>
