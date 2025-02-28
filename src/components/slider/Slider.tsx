@@ -27,10 +27,6 @@ export default function Slider() {
         <SwiperSlide style={{ backgroundColor: "red" }}>Slide 1</SwiperSlide>
         <SwiperSlide style={{ backgroundColor: "red" }}>Slide 1</SwiperSlide>
         <SwiperSlide style={{ backgroundColor: "red" }}>Slide 1</SwiperSlide>
-        <SwiperSlide style={{ backgroundColor: "red" }}>Slide 1</SwiperSlide>
-        <SwiperSlide style={{ backgroundColor: "red" }}>Slide 1</SwiperSlide>
-        <SwiperSlide style={{ backgroundColor: "red" }}>Slide 1</SwiperSlide>
-        <SwiperSlide style={{ backgroundColor: "red" }}>Slide 1</SwiperSlide>
       </Swiper>
     </>
   );
