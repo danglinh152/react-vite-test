@@ -31,6 +31,12 @@ export const ProtectedRoute = () => {
       toast.error("Token đã hết hạn. Bạn cần đăng nhập lại.");
       return <Navigate to="/auth" state={{ fromProtectedRoute: true }} />;
     }
+
+    // Kiểm tra vai trò có phải admin không
+    // if (decodedToken.infoAccessToken.role !== "admin") {
+    //   toast.error("Bạn không có quyền truy cập trang này.");
+    //   return <Navigate to="/auth" state={{ fromProtectedRoute: true }} />;
+    // }
   } catch (error) {
     // Nếu có lỗi khi giải mã token
     toast.error("Có lỗi xảy ra khi xác thực token.");

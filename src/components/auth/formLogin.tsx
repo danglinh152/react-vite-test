@@ -38,7 +38,7 @@ const LoginChildren = () => {
       setToken(json.data.access_token); // Cập nhật token ngay lập tức
 
       // Điều hướng đến /admin
-      navigate("/admin");
+      navigate("/");
     } catch (error) {
       console.log("Lỗi đăng nhập:", error);
     }

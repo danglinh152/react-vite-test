@@ -1,28 +1,79 @@
 import React, { useEffect, useState } from "react";
-import { Breadcrumb, Button, Layout, Menu, theme } from "antd";
-import { Link, Outlet, useLocation } from "react-router-dom"; // Import useLocation from react-router-dom
+import { Breadcrumb, Button, Dropdown, Flex, Layout, Menu, theme } from "antd";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Input } from 'antd';
-import type { GetProps } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import type { GetProps, MenuProps } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  LogoutOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+
+interface User {
+  firstName: string;
+  lastName: string;
+}
 
 const { Header, Content, Footer } = Layout;
 type SearchProps = GetProps<typeof Input.Search>;
-
 const { Search } = Input;
 
 const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
 
 const HomeLayout: React.FC = () => {
-  // const {
-  //   token: { colorBgContainer, borderRadiusLG },
-  // } = theme.useToken();
-  const location = useLocation(); // Use useLocation to get the current pathname
+  const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
 
-  // Use state to track the selected tab
+  const refreshToken = async (): Promise<void> => {
+    try {
+      const response = await fetch("http://localhost:8080/auth/refresh", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(`Response status: ${response.status}, Message: ${errorMessage}`);
+      }
+
+      const json = await response.json();
+      localStorage.setItem("access_token", json.data.access_token);
+    } catch (error) {
+      console.error("Error fetching account:", error);
+    }
+  };
+
+  const getAccount = async (): Promise<void> => {
+    try {
+      const response = await fetch("http://localhost:8080/auth/get-account", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(`Response status: ${response.status}, Message: ${errorMessage}`);
+      }
+
+      const json = await response.json();
+      const newObject = {
+        firstName: json.data.firstName,
+        lastName: json.data.lastName,
+      };
+
+      setUser(newObject);
+    } catch (error) {
+      console.error("Error fetching account:", error);
+    }
+  };
+
+  const location = useLocation();
   const [selectedKey, setSelectedKey] = useState(1);
-  // Effect to update selectedKey based on current path
+
   useEffect(() => {
+    getAccount();
+    refreshToken();
     switch (location.pathname) {
       case "/":
         setSelectedKey(1);
@@ -36,27 +87,57 @@ const HomeLayout: React.FC = () => {
       default:
         setSelectedKey(1);
     }
-  }, [location]); // Re-run effect when location changes
+  }, [location]);
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/auth/sign-out", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Lỗi khi logout");
+      }
+
+      localStorage.removeItem("access_token");
+      navigate("/auth");
+    } catch (error) {
+      console.error("Lỗi khi logout:", error);
+    }
+  };
+
+  const items: MenuProps["items"] = user?.firstName && user?.lastName ? [
+    {
+      key: "1",
+      label: `${user.firstName} ${user.lastName}`,
+      disabled: false,
+    },
+    {
+      type: "divider",
+    },
+    {
+      key: "logout",
+      icon: <LogoutOutlined />,
+      label: "Logout",
+      onClick: handleLogout,
+    },
+  ] : [
+    {
+      key: "login",
+      label: "Log In",
+      onClick: () => navigate("/auth"),
+    }
+  ];
 
   return (
     <Layout>
-      <Header
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 2,
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
+      <Header style={{ position: "sticky", top: 0, zIndex: 2, width: "100%", display: "flex", alignItems: "center" }}>
         <div className="demo-logo" />
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          selectedKeys={[selectedKey.toString()]} // Set the selected key to the state
-          style={{ flex: 1, minWidth: 0 }}
-        >
+        <Menu theme="dark" mode="horizontal" selectedKeys={[selectedKey.toString()]} style={{ flex: 1, minWidth: 0 }}>
           <Menu.Item key="1">
             <Link to="/">Trang Chủ</Link>
           </Menu.Item>
@@ -67,35 +148,22 @@ const HomeLayout: React.FC = () => {
             <Link to="/about-us">Về Chúng Tôi</Link>
           </Menu.Item>
         </Menu>
-        <Search style={{ maxWidth: 250 }} placeholder="Tìm kiếm..." onSearch={onSearch} enterButton />
-        <FontAwesomeIcon style={{ color: "white", fontSize: 25, margin: 12 }} icon={faCartPlus} />
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Search style={{ maxWidth: 250 }} placeholder="Tìm kiếm..." onSearch={onSearch} enterButton />
+          <FontAwesomeIcon style={{ color: "white", fontSize: 25, margin: 12 }} icon={faCartPlus} />
+          <Dropdown menu={{ items }}>
+            <a onClick={(e) => e.preventDefault()}>
+              <Button type="text" icon={<UserOutlined />} style={{ fontSize: "16px", width: 64, height: 64, color: "white" }} />
+            </a>
+          </Dropdown>
+        </div>
       </Header>
-      <Content
-        style={{
-          minHeight: "100vh",
-          padding: "20px 0",
-        }}
-      >
-        <div
-          style={{
-            minHeight: "100vh",
-            // borderRadius: "20px",
-            backgroundColor: "#f0f0f0",
-            padding: "0 100px",
-            // backgroundColor: "red",
-          }}
-        >
+      <Content style={{ minHeight: "100vh", padding: "20px 0" }}>
+        <div style={{ minHeight: "100vh", backgroundColor: "#f0f0f0", padding: "0 100px" }}>
           <Outlet />
         </div>
       </Content>
-      <Footer
-        style={{
-          borderTop: "1px solid #e8e8e8",
-          width: "100%",
-          backgroundColor: "white",
-          textAlign: "center",
-        }}
-      >
+      <Footer style={{ borderTop: "1px solid #e8e8e8", width: "100%", backgroundColor: "white", textAlign: "center" }}>
         Ant Design ©{new Date().getFullYear()} S10.07 BookStore
       </Footer>
     </Layout>
