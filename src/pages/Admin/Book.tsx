@@ -1,14 +1,11 @@
 import {
   Space,
   Table,
-  Tag,
   Popconfirm,
   Modal,
   Form,
   Input,
   Button,
-  Radio,
-  Select,
   InputNumber,
   Upload,
 } from "antd";

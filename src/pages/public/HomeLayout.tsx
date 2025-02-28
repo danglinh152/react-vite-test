@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Breadcrumb, Button, Layout, Menu, theme } from "antd";
 import { Link, Outlet, useLocation } from "react-router-dom"; // Import useLocation from react-router-dom
-import { Input} from 'antd';
+import { Input } from 'antd';
 import type { GetProps } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
@@ -67,23 +67,23 @@ const HomeLayout: React.FC = () => {
             <Link to="/about-us">Về Chúng Tôi</Link>
           </Menu.Item>
         </Menu>
-        <Search style={{ maxWidth:250 }} placeholder="Tìm kiếm..." onSearch={onSearch} enterButton />
-          <FontAwesomeIcon style={{ color:"white", fontSize:25, margin:12 }} icon={faCartPlus} />
-        </Header>
+        <Search style={{ maxWidth: 250 }} placeholder="Tìm kiếm..." onSearch={onSearch} enterButton />
+        <FontAwesomeIcon style={{ color: "white", fontSize: 25, margin: 12 }} icon={faCartPlus} />
+      </Header>
       <Content
-        // style={{
-        //   padding: "0 20px",
-        //   minHeight: "100vh",
-        //   margin: "20px 0",
-        // }}
+        style={{
+          minHeight: "100vh",
+          padding: "20px 0",
+        }}
       >
         <div
-          // style={{
-          //   minHeight: "100vh",
-          //   background: colorBgContainer,
-          //   borderRadius: borderRadiusLG,
-          //   backgroundColor: "yellow",
-          // }}
+          style={{
+            minHeight: "100vh",
+            // borderRadius: "20px",
+            backgroundColor: "#f0f0f0",
+            padding: "0 100px",
+            // backgroundColor: "red",
+          }}
         >
           <Outlet />
         </div>
@@ -91,9 +91,6 @@ const HomeLayout: React.FC = () => {
       <Footer
         style={{
           borderTop: "1px solid #e8e8e8",
-          position: "fixed",
-          left: 0,
-          bottom: 0,
           width: "100%",
           backgroundColor: "white",
           textAlign: "center",
