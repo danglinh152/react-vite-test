@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Breadcrumb, Button, Dropdown, Flex, Layout, Menu, theme } from "antd";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { Input } from 'antd';
-import type { GetProps, MenuProps } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Input } from "antd";
+import type { GetProps, MenuProps } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
-import {
-  LogoutOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 
 interface User {
   firstName: string;
   lastName: string;
+  avatar: string;
 }
 
 const { Header, Content, Footer } = Layout;
 type SearchProps = GetProps<typeof Input.Search>;
 const { Search } = Input;
 
-const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
+const onSearch: SearchProps["onSearch"] = (value, _e, info) =>
+  console.log(info?.source, value);
 
 const HomeLayout: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -34,7 +33,9 @@ const HomeLayout: React.FC = () => {
 
       if (!response.ok) {
         const errorMessage = await response.text();
-        throw new Error(`Response status: ${response.status}, Message: ${errorMessage}`);
+        throw new Error(
+          `Response status: ${response.status}, Message: ${errorMessage}`
+        );
       }
 
       const json = await response.json();
@@ -53,13 +54,17 @@ const HomeLayout: React.FC = () => {
 
       if (!response.ok) {
         const errorMessage = await response.text();
-        throw new Error(`Response status: ${response.status}, Message: ${errorMessage}`);
+        throw new Error(
+          `Response status: ${response.status}, Message: ${errorMessage}`
+        );
       }
 
       const json = await response.json();
+
       const newObject = {
         firstName: json.data.firstName,
         lastName: json.data.lastName,
+        avatar: json.data.avatar,
       };
 
       setUser(newObject);
@@ -85,7 +90,7 @@ const HomeLayout: React.FC = () => {
         setSelectedKey(3);
         break;
       default:
-        setSelectedKey(1);
+        setSelectedKey(0);
     }
   }, [location]);
 
@@ -110,34 +115,75 @@ const HomeLayout: React.FC = () => {
     }
   };
 
-  const items: MenuProps["items"] = user?.firstName && user?.lastName ? [
-    {
-      key: "1",
-      label: `${user.firstName} ${user.lastName}`,
-      disabled: false,
-    },
-    {
-      type: "divider",
-    },
-    {
-      key: "logout",
-      icon: <LogoutOutlined />,
-      label: "Logout",
-      onClick: handleLogout,
-    },
-  ] : [
-    {
-      key: "login",
-      label: "Log In",
-      onClick: () => navigate("/auth"),
-    }
-  ];
+  const items: MenuProps["items"] =
+    user?.firstName && user?.lastName
+      ? [
+          {
+            key: "avatar",
+            label: (
+              <img
+                src={`http://localhost:8080/storage/upload/${user.avatar}`}
+                alt="User Avatar"
+                style={{
+                  width: "180px",
+                  height: "180px",
+                  borderRadius: "50%",
+                  marginBottom: "10px",
+                  objectFit: "cover",
+                }}
+              />
+            ),
+            disabled: false,
+          },
+          {
+            type: "divider",
+          },
+          {
+            key: "1",
+            label: (
+              <Link to={"information"}>
+                {user.firstName} {user.lastName}
+              </Link>
+            ),
+            disabled: false,
+          },
+          {
+            type: "divider",
+          },
+          {
+            key: "logout",
+            icon: <LogoutOutlined />,
+            label: "Logout",
+            onClick: handleLogout,
+          },
+        ]
+      : [
+          {
+            key: "login",
+            label: "Log In",
+            onClick: () => navigate("/auth"),
+          },
+        ];
 
   return (
     <Layout>
-      <Header style={{ position: "sticky", top: 0, zIndex: 2, width: "100%", display: "flex", alignItems: "center" }}>
+      <Header
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 2,
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
         <div className="demo-logo" />
-        <Menu theme="dark" mode="horizontal" selectedKeys={[selectedKey.toString()]} style={{ flex: 1, minWidth: 0 }}>
+        <Menu
+          theme="dark"
+          mode="horizontal"
+          selectedKeys={[selectedKey.toString()]}
+          style={{ flex: 1, minWidth: 0 }}
+        >
           <Menu.Item key="1">
             <Link to="/">Trang Chủ</Link>
           </Menu.Item>
@@ -149,21 +195,52 @@ const HomeLayout: React.FC = () => {
           </Menu.Item>
         </Menu>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <Search style={{ maxWidth: 250 }} placeholder="Tìm kiếm..." onSearch={onSearch} enterButton />
-          <FontAwesomeIcon style={{ color: "white", fontSize: 25, margin: 12 }} icon={faCartPlus} />
+          <Search
+            style={{ maxWidth: 250 }}
+            placeholder="Tìm kiếm..."
+            onSearch={onSearch}
+            enterButton
+          />
+          <FontAwesomeIcon
+            style={{ color: "white", fontSize: 25, margin: 12 }}
+            icon={faCartPlus}
+          />
           <Dropdown menu={{ items }}>
             <a onClick={(e) => e.preventDefault()}>
-              <Button type="text" icon={<UserOutlined />} style={{ fontSize: "16px", width: 64, height: 64, color: "white" }} />
+              <Button
+                type="text"
+                icon={<UserOutlined />}
+                style={{
+                  fontSize: "16px",
+                  width: 64,
+                  height: 64,
+                  color: "white",
+                }}
+              />
             </a>
           </Dropdown>
         </div>
       </Header>
       <Content style={{ minHeight: "100vh", padding: "20px 0" }}>
-        <div style={{ minHeight: "100vh", backgroundColor: "#f0f0f0",paddingLeft:50,paddingRight:50}}>
+        <div
+          style={{
+            minHeight: "100vh",
+            backgroundColor: "#f0f0f0",
+            paddingLeft: 50,
+            paddingRight: 50,
+          }}
+        >
           <Outlet />
         </div>
       </Content>
-      <Footer style={{ borderTop: "1px solid #e8e8e8", width: "100%", backgroundColor: "white", textAlign: "center" }}>
+      <Footer
+        style={{
+          borderTop: "1px solid #e8e8e8",
+          width: "100%",
+          backgroundColor: "white",
+          textAlign: "center",
+        }}
+      >
         Ant Design ©{new Date().getFullYear()} S10.07 BookStore
       </Footer>
     </Layout>

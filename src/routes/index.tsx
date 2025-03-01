@@ -3,13 +3,15 @@ import ManageUser from "../pages/admin/User";
 import BookManager from "../pages/admin/Book";
 import OrderManager from "../pages/admin/Order";
 import { useAuth } from "../provider/authProvider";
-import { ProtectedRoute } from "./ProtectedRoute";
 import AuthPage from "../pages/auth/AuthPage";
 import Adventure from "../pages/public/Adventure";
 import About from "../pages/public/About";
 import HomeLayout from "../pages/public/HomeLayout";
 import Home from "../pages/public/Home";
 import Detail from "../pages/public/Detail";
+import InfoClient from "../pages/client/InfoClientPage";
+import { ProtectedRouteAdmin } from "./ProtectedRouteAdmin";
+import { ProtectedRouteClient } from "./ProtectedRouteClient";
 
 const Routes = () => {
   const { token } = useAuth();
@@ -50,7 +52,7 @@ const Routes = () => {
     {
       path: "/admin",
       // element: <LayoutAdmin />,
-      element: <ProtectedRoute />,
+      element: <ProtectedRouteAdmin />,
       children: [
         {
           index: true,
@@ -63,6 +65,17 @@ const Routes = () => {
         {
           path: "order", // Remove the leading slash for child routes
           element: <OrderManager />,
+        },
+      ],
+    },
+    {
+      path: "/",
+      // element: <LayoutAdmin />,
+      element: <ProtectedRouteClient />,
+      children: [
+        {
+          path: "information",
+          element: <InfoClient />,
         },
       ],
     },
