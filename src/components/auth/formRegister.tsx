@@ -30,17 +30,18 @@ const RegisterChildren = () => {
     const [listUser, setListUser] = useState<User[]>([]);
     const [form] = Form.useForm();
   
-    const handleAddUser = async (values: any) => {
+    const reg = async (values: any) => {
       try {
         const newValues = {
           ...values,
-          role: { roleId: values.role },
+          role: { roleId: 1 },
         };
+        console.log(newValues);
+        
   
-        const response = await fetch(`http://localhost:8080/api/users`, {
+        const response = await fetch(`http://localhost:8080/auth/register`, {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(newValues),
@@ -80,9 +81,9 @@ const RegisterChildren = () => {
       labelCol={{ span: 8 }}
       wrapperCol={{ span: 16 }}
       style={{ maxWidth: 600,marginRight:24,minWidth:400 }}
-      initialValues={{ remember: true, roleId: 1 }}
+      initialValues={{ remember: true }}
       autoComplete="off"
-      onFinish={handleAddUser}
+      onFinish={reg}
     >
       <Form.Item
         label="FirstName"
@@ -139,9 +140,6 @@ const RegisterChildren = () => {
       >
         <Input.Password />
       </Form.Item>
-      <Form.Item name="role" hidden>
-      <Input />
-    </Form.Item>
       {/* <Form.Item<FieldType> name="remember" valuePropName="checked" label={null}>
         <Checkbox>Remember me</Checkbox>
       </Form.Item> */}

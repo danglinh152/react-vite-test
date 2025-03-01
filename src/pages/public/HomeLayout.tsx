@@ -4,7 +4,7 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Input } from "antd";
 import type { GetProps, MenuProps } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 
 interface User {
