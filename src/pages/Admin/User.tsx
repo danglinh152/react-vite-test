@@ -347,6 +347,8 @@ const ManageUser: React.FC = () => {
     });
 
     const json = await response.json();
+    console.log(JSON.stringify(newValues));
+
     setListUser((prev) => [...prev, json.data]);
     setIsModalOpen(false);
     formAdd.resetFields();

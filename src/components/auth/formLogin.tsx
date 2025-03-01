@@ -4,6 +4,7 @@ import { Button, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../provider/authProvider";
 import { ToastContainer } from "react-toastify";
+import { jwtDecode } from "jwt-decode";
 
 type FieldType = {
   username: string;
@@ -33,12 +34,19 @@ const LoginChildren = () => {
 
       const json = await response.json();
 
-      // Lưu token vào localStorage và cập nhật trạng thái
+      // Save token to localStorage and update state
       localStorage.setItem("access_token", json.data.access_token);
-      setToken(json.data.access_token); // Cập nhật token ngay lập tức
+      setToken(json.data.access_token); // Update token immediately
 
-      // Điều hướng đến /admin
-      navigate("/");
+      // Decode the token to check the role
+      const decodedToken = jwtDecode(json.data.access_token);
+
+      // Check if the user is an admin
+      if (decodedToken.authorities === "admin") {
+        navigate("/admin"); // Redirect to /admin if admin
+      } else {
+        navigate("/"); // Redirect to home for non-admins
+      }
     } catch (error) {
       console.log("Lỗi đăng nhập:", error);
     }
@@ -81,9 +89,6 @@ const LoginChildren = () => {
       >
         <Input.Password />
       </Form.Item>
-      <a style={{ float: "right" }} href="">
-        Forgot password
-      </a>
 
       <Form.Item label={null}>
         <Button type="primary" htmlType="submit">
