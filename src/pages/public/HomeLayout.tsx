@@ -4,9 +4,10 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Input } from 'antd';
 import type { GetProps, MenuProps } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import {
   LogoutOutlined,
+  NotificationOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 
@@ -136,7 +137,9 @@ const HomeLayout: React.FC = () => {
   return (
     <Layout>
       <Header style={{ position: "sticky", top: 0, zIndex: 2, width: "100%", display: "flex", alignItems: "center" }}>
-        <div className="demo-logo" />
+        <div className="logo" >
+            <img src="http://localhost:8080/storage/upload/logo.png"  onClick={() => navigate(`/`)} style={{ height:100,cursor:"pointer" }} alt="" />
+          </div>
         <Menu theme="dark" mode="horizontal" selectedKeys={[selectedKey.toString()]} style={{ flex: 1, minWidth: 0 }}>
           <Menu.Item key="1">
             <Link to="/">Trang Chủ</Link>
@@ -148,9 +151,10 @@ const HomeLayout: React.FC = () => {
             <Link to="/about-us">Về Chúng Tôi</Link>
           </Menu.Item>
         </Menu>
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center",justifyContent:"center" }}>
           <Search style={{ maxWidth: 250 }} placeholder="Tìm kiếm..." onSearch={onSearch} enterButton />
-          <FontAwesomeIcon style={{ color: "white", fontSize: 25, margin: 12 }} icon={faCartPlus} />
+          <FontAwesomeIcon icon={faBell} style={{cursor:"pointer", color: "white", fontSize: 16, marginLeft: 32 }} />
+          <FontAwesomeIcon style={{cursor:"pointer", color: "white", fontSize: 16, marginLeft: 32 }} icon={faCartPlus} />
           <Dropdown menu={{ items }}>
             <a onClick={(e) => e.preventDefault()}>
               <Button type="text" icon={<UserOutlined />} style={{ fontSize: "16px", width: 64, height: 64, color: "white" }} />
@@ -159,7 +163,7 @@ const HomeLayout: React.FC = () => {
         </div>
       </Header>
       <Content style={{ minHeight: "100vh", padding: "20px 0" }}>
-        <div style={{ minHeight: "100vh", backgroundColor: "#f0f0f0",paddingLeft:50,paddingRight:50}}>
+        <div style={{ minHeight: "100vh", backgroundColor: "#f5f5f5",paddingLeft:50,paddingRight:50}}>
           <Outlet />
         </div>
       </Content>
