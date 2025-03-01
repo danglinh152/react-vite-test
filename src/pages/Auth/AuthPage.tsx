@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Input, InputNumber, Radio, Tabs } from "antd";
-import { LoginOutlined, UserAddOutlined } from "@ant-design/icons";
+import {
+  LoginOutlined,
+  QuestionCircleFilled,
+  UserAddOutlined,
+} from "@ant-design/icons";
 import { toast, ToastContainer } from "react-toastify";
 import LoginChildren from "../../components/auth/formLogin";
 import { useLocation } from "react-router-dom";
 import RegisterChildren from "../../components/auth/formRegister";
 import Loader from "../../components/Loader";
 import Back from "../../components/back";
+import ForgotPasswd from "../../components/auth/formForgotPasswd";
 
 const AuthPage: React.FC = () => {
   const location = useLocation();
@@ -46,6 +51,12 @@ const AuthPage: React.FC = () => {
               label: "Register",
               children: <RegisterChildren />,
               icon: <UserAddOutlined />,
+            },
+            {
+              key: "3",
+              label: "Forgot Password",
+              children: <ForgotPasswd />,
+              icon: <QuestionCircleFilled />,
             },
           ]}
         />

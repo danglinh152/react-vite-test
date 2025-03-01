@@ -89,9 +89,6 @@ const LoginChildren = () => {
       >
         <Input.Password />
       </Form.Item>
-      <a style={{ float: "right" }} href="">
-        Forgot password
-      </a>
 
       <Form.Item label={null}>
         <Button type="primary" htmlType="submit">
