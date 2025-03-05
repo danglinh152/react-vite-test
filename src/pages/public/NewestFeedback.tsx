@@ -30,9 +30,11 @@ interface FeedbackResponse {
 
 interface Props {
   bookId: string | undefined;
+  refresh: boolean;
 }
 
-const NewestFeedback: React.FC<Props> = (props) => { // Use Props here
+const NewestFeedback: React.FC<Props> = (props) => {
+  // Use Props here
   const { id } = useParams<{ id: string }>(); // Get the id parameter from the URL
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -74,7 +76,7 @@ const NewestFeedback: React.FC<Props> = (props) => { // Use Props here
 
   useEffect(() => {
     fetchFeedbacks(meta.currentPage); // Fetch feedbacks when currentPage changes
-  }, [meta.currentPage, meta.pageSize, id]);
+  }, [meta.currentPage, meta.pageSize, id, props.refresh]);
 
   const renderStars = (rating: number) => {
     const stars = [];

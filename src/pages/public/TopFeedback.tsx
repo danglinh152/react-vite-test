@@ -30,6 +30,7 @@ interface FeedbackResponse {
 
 interface Props {
   bookId: string | undefined;
+  refresh: boolean;
 }
 
 const TopFeedback: React.FC<Props> = (props) => {
@@ -74,7 +75,7 @@ const TopFeedback: React.FC<Props> = (props) => {
 
   useEffect(() => {
     fetchFeedbacks(meta.currentPage); // Fetch feedbacks when currentPage changes
-  }, [meta.currentPage, meta.pageSize, id]);
+  }, [meta.currentPage, meta.pageSize, id, props.refresh]);
 
   const renderStars = (rating: number) => {
     const stars = [];

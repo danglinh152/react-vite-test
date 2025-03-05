@@ -32,6 +32,11 @@ const Detail = () => {
   const { token } = useAuth();
   const [feedbackText, setFeedbackText] = useState<string>(""); // State for feedback text
   const [rating, setRating] = useState<number>(0);
+  const [refreshFeedbacks, setRefreshFeedbacks] = useState<boolean>(false);
+
+  const handleNewFeedback = () => {
+    setRefreshFeedbacks((prev) => !prev); // Toggle to trigger re-fetch
+  };
 
   const fetchBookById = async (id: string | undefined) => {
     if (!id) {
@@ -130,14 +135,13 @@ const Detail = () => {
       // Reset the input fields after successful submission
       setFeedbackText("");
       setRating(0);
+      handleNewFeedback();
       toast.success("Cảm ơn bạn đã gửi nhận xét!"); // Confirmation message
     } catch (error) {
       console.error("Error submitting feedback:", error);
       toast.error("Có lỗi xảy ra. Vui lòng thử lại."); // Improved error message
     }
   };
-
-
 
   useEffect(() => {
     fetchBookById(id);
@@ -372,12 +376,14 @@ const Detail = () => {
                 {
                   key: "1",
                   label: "Mới nhất",
-                  children: <NewestFeedback bookId={id} />,
+                  children: (
+                    <NewestFeedback bookId={id} refresh={refreshFeedbacks} />
+                  ),
                 },
                 {
                   key: "2",
                   label: "Yêu thích nhất",
-                  children: <TopFeedback bookId={id} />,
+                  children: <TopFeedback bookId={id} refresh={refreshFeedbacks}/>,
                 },
               ]}
             />
