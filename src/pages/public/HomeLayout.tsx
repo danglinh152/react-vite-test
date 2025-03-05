@@ -6,6 +6,7 @@ import type { GetProps, MenuProps } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import MyFooter from "../../components/layout/MyFooter";
 
 interface User {
   firstName: string;
@@ -207,16 +208,8 @@ const HomeLayout: React.FC = () => {
           <Outlet />
         </div>
       </Content>
-      <Footer
-        style={{
-          borderTop: "1px solid #e8e8e8",
-          width: "100%",
-          backgroundColor: "white",
-          textAlign: "center",
-        }}
-      >
-        Ant Design ©{new Date().getFullYear()} S10.07 BookStore
-      </Footer>
+       
+      <MyFooter/>
     </Layout>
   );
 };
