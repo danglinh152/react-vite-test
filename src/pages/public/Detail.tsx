@@ -21,6 +21,7 @@ interface Book {
 const Detail = () => {
   const { id } = useParams<{ id: string }>(); // Get the id parameter from the URL
   const [book, setBook] = useState<Book | null>(null);
+  const [expand, setExpand] = useState<boolean>(false);
 
   const fetchBookById = async (id: string | undefined) => {
     if (!id) {
@@ -29,11 +30,7 @@ const Detail = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8080/api/books/${id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      });
+      const response = await fetch(`http://localhost:8080/api/books/${id}`);
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -80,6 +77,66 @@ const Detail = () => {
       }
     } catch (error) {
       console.error("Failed to fetch book:", error);
+    }
+  };
+
+  const expandDesc = () => {
+    if (expand) {
+      const block = document.getElementById("desc-block");
+      const containerBlock = document.getElementById("container-detail");
+      if (block && containerBlock) {
+        block.style.height = "160px";
+        containerBlock.style.position = "relative"; // Đảm bảo phần tử cha có position relative
+        const style = document.createElement("style");
+        document.head.appendChild(style);
+
+        // Thêm CSS cho pseudo-element
+        if (style) {
+          style.sheet?.insertRule(
+            `
+                        .container-detail::before {
+  content: ''; !important
+  position: absolute; !important
+  top: 0; !important
+  left: 0; !important
+  right: 0; !important
+  bottom: 0; !important
+  background: linear-gradient(rgba(255, 255, 255, 0), rgb(255, 255, 255)); !important
+  z-index: 0; !important
+  /* Đặt pseudo-element phía dưới nội dung */
+}
+                    `,
+            style.sheet.cssRules.length
+          );
+        }
+        setExpand(false);
+      }
+    } else {
+      const block = document.getElementById("desc-block");
+      const containerBlock = document.getElementById("container-detail");
+      if (block && containerBlock) {
+        block.style.height = "";
+        block.style.position = "static";
+
+        const style = document.createElement("style");
+        document.head.appendChild(style);
+
+        // Thêm CSS cho pseudo-element
+        if (style) {
+          console.log("ok");
+
+          style.sheet?.insertRule(
+            `
+                        .container-detail::before{
+                        content: none; !important
+}
+                    `,
+            style.sheet.cssRules.length
+          );
+        }
+
+        setExpand(true);
+      }
     }
   };
 
@@ -239,19 +296,47 @@ const Detail = () => {
             />
           </div>
           <div
+            id="container-detail"
             style={{
-              backgroundColor: "White",
+              background: "white",
               borderRadius: "20px",
               padding: "10px 30px",
             }}
           >
-            <h2>Mô tả sản phẩm</h2>
-            <p style={{ lineHeight: 1.8 }}>
-              {book ? book.description : "Loading..."}
-            </p>
+            <div
+              id="desc-block"
+              style={{
+                height: "160px", // Adjust height based on state
+                overflow: "hidden",
+                // backgroundColor: "rgb(255 255 255 / 50%)",
+                // backdropFilter: "blur(10px)",
+              }}
+            >
+              <h2>Mô tả sản phẩm</h2>
+
+              <p style={{ lineHeight: 1.8 }}>
+                {book ? book.description : "Loading..."}
+              </p>
+            </div>
+            <div className="mt-2">
+              <Button
+                style={{
+                  border: "none",
+                  margin: "0 auto",
+                  display: "block",
+                  color: "black",
+                  fontWeight: "500",
+                  fontStyle: "italic",
+                }}
+                onClick={expandDesc}
+              >
+                {expand ? "Thu gọn..." : "Mở Rộng..."}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
+      <div>feedback</div>
     </>
   );
 };
