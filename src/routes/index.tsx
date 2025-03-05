@@ -38,7 +38,8 @@ const Routes = () => {
         {
           path: "/detail/:id",
           element: <Detail />,
-        },
+        }
+     
       ],
     },
     {

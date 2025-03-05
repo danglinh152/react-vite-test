@@ -38,7 +38,9 @@ const Home = () => {
           <FontAwesomeIcon style={{ color:"blue" }} icon={faChevronRight} />
       </div>
     </div>
+    <div style={{ width:"100%", height:400,background:"white",border:"1px solid white",borderRadius:12, marginTop:20,marginBottom:20}}>
       <CardProduct /> 
+    </div>
 
       <div style={{ width:"100%", height:100,background:"white",border:"1px solid white",borderRadius:12, marginBottom:20,display:"flex",alignItems:"center",justifyContent:"space-around" }}>
           <IconCard name="Top Deal" path="like.png" />

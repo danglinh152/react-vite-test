@@ -206,14 +206,14 @@ const HomeLayout: React.FC = () => {
           </Dropdown>
         </div>
       </Header>
-      <div style={{ background: "#f0f2f5", padding: "10px", textAlign: "center" }}>
+      <div style={{ background: "rgb(216 223 233)", padding: "10px", textAlign: "center" }}>
 
       <Row justify="space-between" gutter={16}>
-        <Col span={7} style={{ color:"#787878", cursor: "pointer", display: "flex", justifyContent: "flex-start",paddingLeft:50 }}>
+        <Col span={9} style={{ color:"#787878", cursor: "pointer", display: "flex", justifyContent: "flex-start",paddingLeft:50 }}>
           <FontAwesomeIcon icon={faList} />
           Danh mục sản phẩm
         </Col>
-        <Col span={17} style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+        <Col span={15} style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
           <Col span={3} style={{ color:"#787878", cursor: "pointer", display: "flex", justifyContent: "center" }}>
             <FontAwesomeIcon icon={faCircleInfo} />
             Trợ giúp
