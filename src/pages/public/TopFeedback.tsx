@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { StarFilled } from "@ant-design/icons"; // Import icon StarFilled
 import { Pagination, Spin } from "antd";
+import { useParams } from "react-router-dom";
 
 interface Feedback {
   feedbackId: number;
@@ -32,6 +33,7 @@ interface Props {
 }
 
 const TopFeedback: React.FC<Props> = (props) => {
+  const { id } = useParams<{ id: string }>(); // Get the id parameter from the URL
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -72,7 +74,7 @@ const TopFeedback: React.FC<Props> = (props) => {
 
   useEffect(() => {
     fetchFeedbacks(meta.currentPage); // Fetch feedbacks when currentPage changes
-  }, [meta.currentPage, meta.pageSize, props]);
+  }, [meta.currentPage, meta.pageSize, id]);
 
   const renderStars = (rating: number) => {
     const stars = [];
