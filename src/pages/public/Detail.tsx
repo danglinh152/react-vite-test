@@ -373,12 +373,12 @@ const Detail = () => {
                 {
                   key: "1",
                   label: "Mới nhất",
-                  children: <NewestFeedback />,
+                  children: <NewestFeedback bookId={id} />,
                 },
                 {
                   key: "2",
                   label: "Yêu thích nhất",
-                  children: <TopFeedback />,
+                  children: <TopFeedback bookId={id} />,
                 },
               ]}
             />

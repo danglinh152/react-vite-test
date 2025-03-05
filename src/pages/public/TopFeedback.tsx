@@ -27,7 +27,11 @@ interface FeedbackResponse {
   };
 }
 
-const TopFeedback: React.FC = () => {
+interface Props {
+  bookId: string | undefined;
+}
+
+const TopFeedback: React.FC<Props> = (props) => {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -42,7 +46,7 @@ const TopFeedback: React.FC = () => {
     setLoading(true); // Start loading
     try {
       const response = await fetch(
-        `http://localhost:8080/api/feedbacks?sort=rate,desc&page=${page}&size=${meta.pageSize}`
+        `http://localhost:8080/api/feedbacks?sort=rate,desc&filter=book:${props.bookId}&page=${page}&size=${meta.pageSize}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -68,7 +72,7 @@ const TopFeedback: React.FC = () => {
 
   useEffect(() => {
     fetchFeedbacks(meta.currentPage); // Fetch feedbacks when currentPage changes
-  }, [meta.currentPage, meta.pageSize]);
+  }, [meta.currentPage, meta.pageSize, props]);
 
   const renderStars = (rating: number) => {
     const stars = [];
