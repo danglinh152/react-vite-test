@@ -26,13 +26,6 @@ const Home = () => {
       <Slider  />
       <NextoSlider/>
     </div>
-    <div style={{ width:"100%", height:200,background:"white",border:"1px solid white",borderRadius:12, marginBottom:20,display:"flex",alignItems:"center",justifyContent:"space-around" }}>
-      <ImageCard path="MCBooks_KCt3_840x320.png"/>
-      <ImageCard path="MCBooks_KCt3_840x320.png"/>
-      <ImageCard path="MCBooks_KCt3_840x320.png"/>
-      <ImageCard path="MCBooks_KCt3_840x320.png"/>
-
-      </div>
 
     <div style={{ width:"100%", height:70,background:"white",border:"1px solid white",borderRadius:12, marginBottom:20,display:"flex",alignItems:"center",justifyContent:"space-between" }}>
       <div style={{ display:"flex",alignItems:"center" }}>
