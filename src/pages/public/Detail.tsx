@@ -1,6 +1,6 @@
 import { Button, Input, Tabs, Rate } from "antd";
 import { useEffect, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { ShoppingCartOutlined, StarFilled } from "@ant-design/icons";
 import NewestFeedback from "./NewestFeedback";
 import TopFeedback from "./TopFeedback";

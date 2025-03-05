@@ -32,15 +32,16 @@ const HomeLayout: React.FC = () => {
         credentials: "include",
       });
 
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(
-          `Response status: ${response.status}, Message: ${errorMessage}`
-        );
-      }
+      // if (!response.ok) {
+      //   const errorMessage = await response.text();
+      //   throw new Error(
+      //     `Response status: ${response.status}, Message: ${errorMessage}`
+      //   );
+      // }
 
       const json = await response.json();
       localStorage.setItem("access_token", json.data.access_token);
+      
     } catch (error) {
       console.error("Error fetching account:", error);
     }
