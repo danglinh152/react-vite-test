@@ -11,6 +11,7 @@ import {
 import { Button, Dropdown, Layout, Menu, MenuProps, theme } from "antd";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import MyFooter from "../../components/layout/MyFooter";
 
 const { Header, Sider } = Layout;
 
@@ -138,81 +139,79 @@ const LayoutAdmin: React.FC = () => {
   ];
 
   return (
-    <Layout style={{ height: "98vh" }}>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        closeOnClick
-        pauseOnHover
-        style={{
-          marginTop: 60,
-        }}
-      />
-
-      <Sider
-        trigger={null}
-        collapsible
-        collapsed={collapsed}
-        style={{ borderRadius: "15px" }}
-      >
-        <div className="demo-logo-vertical" />
-        <Menu
-          theme="dark"
-          mode="inline"
-          selectedKeys={[currPage.toString()]}
-          style={{ borderRadius: "15px" }}
-        >
-          <Menu.Item key="1" icon={<HomeOutlined />}>
-            <Link to="/admin/">Home</Link>
-          </Menu.Item>
-          <Menu.Item key="2" icon={<BookOutlined />}>
-            <Link to="/admin/book">Book</Link>
-          </Menu.Item>
-          <Menu.Item key="3" icon={<DiffOutlined />}>
-            <Link to="/admin/order">Order</Link>
-          </Menu.Item>
-        </Menu>
-      </Sider>
-      <Layout>
-        <Header
+    <div>
+      <Layout style={{ height: "98vh" }}>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          closeOnClick
+          pauseOnHover
           style={{
-            padding: 0,
-            background: colorBgContainer,
-            display: "flex",
-            justifyContent: "space-between",
+            marginTop: 60,
           }}
-        >
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{ fontSize: "16px", width: 64, height: 64 }}
-          />
-          <Dropdown menu={{ items }}>
-            <a onClick={(e) => e.preventDefault()}>
-              <Button
-                type="text"
-                icon={<UserOutlined />}
-                style={{ fontSize: "16px", width: 64, height: 64 }}
-              />
-            </a>
-          </Dropdown>
-        </Header>
+        />
 
-        <div
-          style={{
-            margin: "24px 16px",
-            padding: 24,
-            minHeight: "87vh",
-            background: "transparent",
-            borderRadius: "20px",
-          }}
-        >
-          <Outlet />
-        </div>
+        <Sider trigger={null} collapsible collapsed={collapsed}>
+          <div className="demo-logo-vertical" />
+          <Menu
+            theme="dark"
+            mode="inline"
+            selectedKeys={[currPage.toString()]}
+            style={{ borderRadius: "15px" }}
+          >
+            <Menu.Item key="1" icon={<HomeOutlined />}>
+              <Link to="/admin/">Home</Link>
+            </Menu.Item>
+            <Menu.Item key="2" icon={<BookOutlined />}>
+              <Link to="/admin/book">Book</Link>
+            </Menu.Item>
+            <Menu.Item key="3" icon={<DiffOutlined />}>
+              <Link to="/admin/order">Order</Link>
+            </Menu.Item>
+          </Menu>
+        </Sider>
+        <Layout>
+          <Header
+            style={{
+              padding: 0,
+              background: colorBgContainer,
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Button
+              type="text"
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+              style={{ fontSize: "16px", width: 64, height: 64 }}
+            />
+            <Dropdown menu={{ items }}>
+              <a onClick={(e) => e.preventDefault()}>
+                <Button
+                  type="text"
+                  icon={<UserOutlined />}
+                  style={{ fontSize: "16px", width: 64, height: 64 }}
+                />
+              </a>
+            </Dropdown>
+          </Header>
+
+          <div
+            style={{
+              margin: "24px 16px",
+              padding: 24,
+              minHeight: "87vh",
+              background: "transparent",
+              borderRadius: "20px",
+            }}
+          >
+            <Outlet />
+          </div>
+        </Layout>
       </Layout>
-    </Layout>
+      <MyFooter />
+    </div>
   );
 };
 

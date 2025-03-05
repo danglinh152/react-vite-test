@@ -1,7 +1,13 @@
-import { Button } from "antd";
+import { Button, Input, Tabs, Rate } from "antd";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { ShoppingCartOutlined, StarFilled } from "@ant-design/icons";
+import NewestFeedback from "./NewestFeedback";
+import TopFeedback from "./TopFeedback";
+import AllProduct from "../../components/card/AllProduct";
+import { useAuth } from "../../provider/authProvider";
+import { jwtDecode } from "jwt-decode";
+import { toast, ToastContainer } from "react-toastify";
 
 interface Book {
   bookId: number;
@@ -22,6 +28,10 @@ const Detail = () => {
   const { id } = useParams<{ id: string }>(); // Get the id parameter from the URL
   const [book, setBook] = useState<Book | null>(null);
   const [expand, setExpand] = useState<boolean>(false);
+  const [decodedToken, setDecodedToken] = useState<any | null>(null);
+  const { token } = useAuth();
+  const [feedbackText, setFeedbackText] = useState<string>(""); // State for feedback text
+  const [rating, setRating] = useState<number>(0);
 
   const fetchBookById = async (id: string | undefined) => {
     if (!id) {
@@ -81,77 +91,88 @@ const Detail = () => {
   };
 
   const expandDesc = () => {
-    if (expand) {
-      const block = document.getElementById("desc-block");
-      const containerBlock = document.getElementById("container-detail");
-      if (block && containerBlock) {
-        block.style.height = "160px";
-        containerBlock.style.position = "relative"; // Đảm bảo phần tử cha có position relative
-        const style = document.createElement("style");
-        document.head.appendChild(style);
+    const block = document.getElementById("desc-block");
 
-        // Thêm CSS cho pseudo-element
-        if (style) {
-          style.sheet?.insertRule(
-            `
-                        .container-detail::before {
-  content: ''; !important
-  position: absolute; !important
-  top: 0; !important
-  left: 0; !important
-  right: 0; !important
-  bottom: 0; !important
-  background: linear-gradient(rgba(255, 255, 255, 0), rgb(255, 255, 255)); !important
-  z-index: 0; !important
-  /* Đặt pseudo-element phía dưới nội dung */
-}
-                    `,
-            style.sheet.cssRules.length
-          );
-        }
-        setExpand(false);
+    if (block) {
+      // Toggle height based on the current state
+      block.style.height = expand ? "160px" : ""; // Set height or reset it
+      setExpand(!expand); // Toggle the expand state
+    }
+  };
+
+  const handleAddFeedback = async () => {
+    if (!feedbackText) {
+      alert("Vui lòng nhập nhận xét và đánh giá."); // Alert if fields are empty
+      return;
+    }
+
+    const feedbackValue = {
+      feedback: feedbackText,
+      rate: rating,
+      book: { bookId: book?.bookId }, // Get bookId from the book state
+      user: { userId: decodedToken?.userId }, // Get userId from decoded token
+    };
+
+    try {
+      const response = await fetch(`http://localhost:8080/api/feedbacks`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(feedbackValue),
+      });
+      console.log(decodedToken);
+
+      console.log(feedbackValue);
+
+      if (!response.ok) {
+        throw new Error("Failed to submit feedback");
       }
-    } else {
-      const block = document.getElementById("desc-block");
-      const containerBlock = document.getElementById("container-detail");
-      if (block && containerBlock) {
-        block.style.height = "";
-        block.style.position = "static";
 
-        const style = document.createElement("style");
-        document.head.appendChild(style);
-
-        // Thêm CSS cho pseudo-element
-        if (style) {
-          console.log("ok");
-
-          style.sheet?.insertRule(
-            `
-                        .container-detail::before{
-                        content: none; !important
-}
-                    `,
-            style.sheet.cssRules.length
-          );
-        }
-
-        setExpand(true);
-      }
+      // Reset the input fields after successful submission
+      setFeedbackText("");
+      setRating(0);
+      toast.success("Cảm ơn bạn đã gửi nhận xét!"); // Confirmation message
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      toast.error("Có lỗi xảy ra. Vui lòng thử lại."); // Improved error message
     }
   };
 
   useEffect(() => {
     fetchBookById(id);
-  }, [id]); // Add id to dependency array to re-fetch when id changes
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000; // Thời gian hiện tại tính bằng giây
+
+      // Kiểm tra xem exp có tồn tại không
+      if (decodedToken.exp === undefined) {
+        setDecodedToken(null);
+      } else {
+        if (decodedToken.exp < currentTime) {
+          // Token đã hết hạn
+          setDecodedToken(null);
+        }
+      }
+      setDecodedToken(decodedToken);
+    }
+  }, [id, token]); // Add token to dependency array to decode when it changes
 
   return (
     <>
-      <div
-        style={{
-          display: "flex",
-          gap: "20px",
-        }}
-      >
+      <ToastContainer
+        position="top-center" // Change to top-left or top-right as needed
+        autoClose={5000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+        draggablePercent={60}
+        theme="colored"
+      />
+
+      <div style={{ display: "flex", gap: "20px" }}>
         <div
           style={{
             flex: 3,
@@ -242,12 +263,7 @@ const Detail = () => {
               <StarFilled style={{ marginLeft: "5px", color: "#efb943" }} />
             </p>
 
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
+            <div style={{ display: "flex", alignItems: "center" }}>
               <p
                 style={{
                   color: "red",
@@ -308,8 +324,6 @@ const Detail = () => {
               style={{
                 height: "160px", // Adjust height based on state
                 overflow: "hidden",
-                // backgroundColor: "rgb(255 255 255 / 50%)",
-                // backdropFilter: "blur(10px)",
               }}
             >
               <h2>Mô tả sản phẩm</h2>
@@ -336,7 +350,94 @@ const Detail = () => {
           </div>
         </div>
       </div>
-      <div>feedback</div>
+      <div
+        style={{
+          backgroundColor: "White",
+          margin: "20px 0",
+          borderRadius: "20px",
+          padding: "10px 30px",
+        }}
+      >
+        <h2>Đánh giá sản phẩm</h2>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ flex: 5 }}>
+            <Tabs
+              defaultActiveKey="1"
+              items={[
+                {
+                  key: "1",
+                  label: "Mới nhất",
+                  children: <NewestFeedback bookId={id} />,
+                },
+                {
+                  key: "2",
+                  label: "Yêu thích nhất",
+                  children: <TopFeedback bookId={id} />,
+                },
+              ]}
+            />
+          </div>
+          <div style={{ flex: 5 }}>
+            {decodedToken ? (
+              <div>
+                <Input.TextArea
+                  rows={4}
+                  placeholder="Nhập nhận xét của bạn..."
+                  value={feedbackText}
+                  onChange={(e) => setFeedbackText(e.target.value)} // Update feedback text
+                  style={{ borderRadius: "10px" }}
+                />
+                <Rate
+                  onChange={setRating} // Update rating
+                  value={rating}
+                  style={{ marginTop: "10px" }}
+                />
+                <Button
+                  type="primary"
+                  style={{ margin: "10px 0 0 15px" }}
+                  onClick={handleAddFeedback}
+                >
+                  Gửi nhận xét
+                </Button>
+              </div>
+            ) : (
+              <p style={{ color: "red", marginTop: "20px" }}>
+                Bạn hãy đăng nhập/đăng ký để có thể nhận xét sản phẩm.
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+      <div
+        style={{
+          position: "relative", // Change to relative for proper layout
+          borderRadius: "20px",
+          overflow: "hidden", // Ensures content is contained within the border radius
+          backgroundImage:
+            "url('https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/banner_personalization.png')",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          padding: "20px", // Add padding for spacing
+          minHeight: "300px", // Ensure a minimum height for the container
+        }}
+      >
+        <div
+          style={{
+            position: "relative", // Keep this relative for child positioning
+            marginTop: "150px", // Adjust margin instead of top for better control
+            zIndex: 1, // Ensure it appears above the background
+          }}
+        >
+          <AllProduct />
+        </div>
+      </div>
     </>
   );
 };
