@@ -10,7 +10,6 @@ import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 import { Navigate } from "react-router-dom";
 
-
 const { Title, Text } = Typography;
 
 interface DecodedToken {
@@ -110,31 +109,72 @@ const InfoClient: React.FC = () => {
   }
 
   return (
-    <div className="container">
-      <Card className="card">
-        <img src={`http://localhost:8080/storage/upload/${userInfo?.avatar}`} alt="Avatar" className="avatar" />
-        <Title level={3}>{userInfo ? userInfo.name : "Tên người dùng"}</Title>
-        <div className="text">
-          <Text>Phone: {userInfo ? userInfo.phoneNumber : "Số điện thoại"}</Text>
+    <div
+      className="container"
+      style={{
+        padding: "20px",
+        backgroundColor: "#f0f2f5",
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <Card
+        className="card"
+        style={{
+          borderRadius: "10px",
+          boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+          textAlign: "center",
+          padding: "20px",
+          width: "400px",
+          height: "100%",
+        }}
+      >
+        <img
+          src={`http://localhost:8080/storage/upload/${userInfo?.avatar}`}
+          alt="Avatar"
+          className="avatar"
+          style={{
+            borderRadius: "50%",
+            width: "100px",
+            height: "100px",
+            marginBottom: "20px",
+          }}
+        />
+        <Title level={3} style={{ color: "#333" }}>
+          {userInfo ? userInfo.name : "Tên người dùng"}
+        </Title>
+        <div className="text" style={{ marginBottom: "10px" }}>
+          <Text>
+            Phone: {userInfo ? userInfo.phoneNumber : "Số điện thoại"}
+          </Text>
         </div>
-        <div className="text">
+        <div className="text" style={{ marginBottom: "10px" }}>
           <Text>Email: {userInfo ? userInfo.email : "Email người dùng"}</Text>
         </div>
-        <div className="text">
+        <div className="text" style={{ marginBottom: "10px" }}>
           <Text>Gender: {userInfo ? userInfo.gender : "Giới tính"}</Text>
         </div>
-        <div className="text">
+        <div className="text" style={{ marginBottom: "20px" }}>
           <Text>Created At: {userInfo ? userInfo.createdAt : "Ngày tạo"}</Text>
         </div>
-        <Row className="social-icons">
-          <Col span={8}>
-            <FacebookFilled className="icon" style={{ color: "#3b5998" }} />
+        <Row className="social-icons" justify="center">
+          <Col span={6}>
+            <FacebookFilled
+              className="icon"
+              style={{ color: "#3b5998", fontSize: "24px" }}
+            />
           </Col>
-          <Col span={8}>
-            <InstagramFilled className="icon" style={{ color: "#e1306c" }} />
+          <Col span={6}>
+            <InstagramFilled
+              className="icon"
+              style={{ color: "#e1306c", fontSize: "24px" }}
+            />
           </Col>
-          <Col span={8}>
-            <YoutubeFilled className="icon" style={{ color: "#ff0000" }} />
+          <Col span={6}>
+            <YoutubeFilled
+              className="icon"
+              style={{ color: "#ff0000", fontSize: "24px" }}
+            />
           </Col>
         </Row>
       </Card>
