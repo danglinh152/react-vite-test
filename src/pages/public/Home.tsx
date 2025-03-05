@@ -7,9 +7,8 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { Tabs , Statistic } from "antd";
 import SingleProduct from "../../components/card/SingleProduct";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import LoadingBar from "../../components/load/LoadingBar";
 import IconCard from "../../components/iconcard/IconCard";
+import TopBookProps from "../../components/topbook/topbook";
 
 
 const Home = () => {
@@ -19,14 +18,7 @@ const Home = () => {
     deadline
   };
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
 
-  const fetchData = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-  };
   return (
     <>
     <div style={{ background:"white",border:"1px solid white",borderRadius:12,marginTop:20,marginBottom:20, height: "60.2vh",zIndex:1,display:"flex",flexWrap:"wrap",flexDirection:"column"}}>
@@ -52,9 +44,7 @@ const Home = () => {
           <IconCard name="Coupon siêu hot" path="coupon.png" />
           <IconCard name="Top sách bán chạy" path="book.png" />
           <IconCard name="Xả kho giảm nửa giá" path="sale.png" />
-          <IconCard name="Top sách nước ngoài" path="foreign.png" />
-
-          
+          <IconCard name="Top sách nước ngoài" path="foreign.png" />  
       </div>
       <div style={{ width:"100%", height:900,background:"white", marginBottom:20,display:"flex",flexDirection:"column" }}>
       <div style={{ }}>
@@ -94,12 +84,18 @@ const Home = () => {
         />
       </div>
           <div className="card_container" style={{ marginBottom:50 }}>
-
           </div>
          </div>
-      </div>
-
+      </div> 
     </div>
+    <div style={{ width:"100%", height:150,background:"white",border:"1px solid white",borderRadius:12, marginBottom:20,display:"flex",alignItems:"center",justifyContent:"space-around" }}>
+          <TopBookProps name="Ôn thi THPT" path="onthithpt.png" />
+          <TopBookProps name="Ngữ pháp tiếng Anh" path="nguphaptienganh.png" />
+          <TopBookProps name="Kinh dị - bí ẩn" path="kinhdi.png" />
+          <TopBookProps name="Tô màu cảm xúc" path="tomaucamxuc.png" />
+          <TopBookProps name="Hướng dẫn sử dụng mẹ" path="huongdansudungme.png" />
+          <TopBookProps name="Song ngữ thiếu nhi" path="hoangtube.png" />  
+      </div>
     </>
   );
 };

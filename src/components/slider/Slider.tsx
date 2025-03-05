@@ -22,7 +22,7 @@ export default function Slider() {
         pagination={{ clickable: true }} // Make pagination clickable
         modules={[Pagination]} // Include Pagination module
         className="mySwiper"
-        style={{ width:"65%",paddingRight:20 }}
+        style={{ width:"65%",marginRight:20 }}
       >
         <SwiperSlide  style={{
                  backgroundImage: `url("http://localhost:8080/storage/upload/MCBooks_KCt3_840x320.png")`,
@@ -32,7 +32,7 @@ export default function Slider() {
                  minHeight: "200px",
               }}></SwiperSlide>
         <SwiperSlide  style={{
-          backgroundImage: `url("http://localhost:8080/storage/upload/Screenshot_2025-02-28_141857.jpg")`,
+          backgroundImage: `url("http://localhost:8080/storage/upload/sachthang3.jpg")`,
           backgroundSize: "contain", // Fit ảnh trong khung
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",

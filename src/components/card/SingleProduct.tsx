@@ -42,7 +42,7 @@ interface Book {
     }
   
     return (
-      <StyledWrapper>
+      <div>
         <div className="card_container" style={{ marginBottom: 50 }}>
           <div className="card"  onClick={() => navigate(`/detail/${book.bookId}`)} >
             <div
@@ -61,12 +61,11 @@ interface Book {
             </div>
           </div>
         </div>
-      </StyledWrapper>
+      </div>
     );
   };
   
-  const StyledWrapper = styled.div`
-  `;
+  
 
   export default SingleProduct;
   
