@@ -122,9 +122,6 @@ const Detail = () => {
         },
         body: JSON.stringify(feedbackValue),
       });
-      console.log(decodedToken);
-
-      console.log(feedbackValue);
 
       if (!response.ok) {
         throw new Error("Failed to submit feedback");
@@ -139,6 +136,8 @@ const Detail = () => {
       toast.error("Có lỗi xảy ra. Vui lòng thử lại."); // Improved error message
     }
   };
+
+
 
   useEffect(() => {
     fetchBookById(id);
