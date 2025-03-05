@@ -6,6 +6,7 @@ import type { GetProps, MenuProps } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell, faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import MyFooter from "../../components/layout/MyFooter";
 
 interface User {
   firstName: string;
@@ -167,11 +168,30 @@ const HomeLayout: React.FC = () => {
 
   return (
     <Layout>
-      <Header style={{ position: "sticky", top: 0, zIndex: 2, width: "100%", display: "flex", alignItems: "center" }}>
-        <div className="logo" >
-            <img src="http://localhost:8080/storage/upload/logo.png"  onClick={() => navigate(`/`)} style={{ height:100,cursor:"pointer" }} alt="" />
-          </div>
-        <Menu theme="dark" mode="horizontal" selectedKeys={[selectedKey.toString()]} style={{ flex: 1, minWidth: 0 }}>
+      <Header
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 2,
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <div className="logo">
+          <img
+            src="http://localhost:8080/storage/upload/logo.png"
+            onClick={() => navigate(`/`)}
+            style={{ height: 100, cursor: "pointer" }}
+            alt=""
+          />
+        </div>
+        <Menu
+          theme="dark"
+          mode="horizontal"
+          selectedKeys={[selectedKey.toString()]}
+          style={{ flex: 1, minWidth: 0 }}
+        >
           <Menu.Item key="1">
             <Link to="/">Trang Chủ</Link>
           </Menu.Item>
@@ -182,10 +202,37 @@ const HomeLayout: React.FC = () => {
             <Link to="/about-us">Về Chúng Tôi</Link>
           </Menu.Item>
         </Menu>
-        <div style={{ display: "flex", alignItems: "center",justifyContent:"center" }}>
-          <Search style={{ maxWidth: 250 }} placeholder="Tìm kiếm..." onSearch={onSearch} enterButton />
-          <FontAwesomeIcon icon={faBell} style={{cursor:"pointer", color: "white", fontSize: 16, marginLeft: 32 }} />
-          <FontAwesomeIcon style={{cursor:"pointer", color: "white", fontSize: 16, marginLeft: 32 }} icon={faCartPlus} />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Search
+            style={{ maxWidth: 250 }}
+            placeholder="Tìm kiếm..."
+            onSearch={onSearch}
+            enterButton
+          />
+          <FontAwesomeIcon
+            icon={faBell}
+            style={{
+              cursor: "pointer",
+              color: "white",
+              fontSize: 16,
+              marginLeft: 32,
+            }}
+          />
+          <FontAwesomeIcon
+            style={{
+              cursor: "pointer",
+              color: "white",
+              fontSize: 16,
+              marginLeft: 32,
+            }}
+            icon={faCartPlus}
+          />
           <Dropdown menu={{ items }}>
             <a onClick={(e) => e.preventDefault()}>
               <Button
@@ -203,20 +250,18 @@ const HomeLayout: React.FC = () => {
         </div>
       </Header>
       <Content style={{ minHeight: "100vh", padding: "20px 0" }}>
-        <div style={{ minHeight: "100vh", backgroundColor: "#f5f5f5",paddingLeft:50,paddingRight:50}}>
+        <div
+          style={{
+            minHeight: "100vh",
+            backgroundColor: "#f5f5f5",
+            paddingLeft: 50,
+            paddingRight: 50,
+          }}
+        >
           <Outlet />
         </div>
       </Content>
-      <Footer
-        style={{
-          borderTop: "1px solid #e8e8e8",
-          width: "100%",
-          backgroundColor: "white",
-          textAlign: "center",
-        }}
-      >
-        Ant Design ©{new Date().getFullYear()} S10.07 BookStore
-      </Footer>
+      <MyFooter />
     </Layout>
   );
 };

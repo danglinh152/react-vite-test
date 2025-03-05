@@ -1,0 +1,62 @@
+.my-footer {
+    background-color: #001529; // Dark background
+    color: white; // White text
+    text-align: center; // Centered text
+    padding: 40px 0; // Increased padding for better spacing
+
+    .footer-content {
+        display: flex; // Use flexbox
+        align-items: center; // Center items vertically
+        justify-content: space-between; // Space out address and links
+        width: 100%; // Full width
+        max-width: 1200px; // Max width for better alignment
+        margin: 0 auto; // Center the footer content
+
+        .footer-address {
+            flex: 1; // Allow address to take available space
+            font-size: 18px;
+            font-style: italic;
+            text-align: left; // Left align address text
+        }
+
+        .footer-divider {
+            border: none; // Remove default border
+            height: 100px; // Set height
+            background-color: rgba(255, 255, 255, 0.2); // Light color for the divider
+            width: 1px; // Thin divider width
+            margin: 0 20px; // Margin for spacing
+        }
+
+        .footer-links {
+            display: flex; // Use flexbox for links
+            justify-content: space-between; // Space out link sections
+            flex: 2; // Allow links to take more space
+            text-align: left; // Left align text
+
+            .service-section, .support-section, .account-section {
+                flex: 1; // Equal space for each section
+                padding: 0 20px; // Padding for sections
+
+                p {
+                    margin-bottom: 10px; // Space below headings
+                }
+
+                .links {
+                    p {
+                        margin: 5px 0; // Space between links
+                        cursor: pointer; // Pointer on hover
+                        transition: color 0.3s; // Transition for hover effect
+
+                        &:hover {
+                            color: #1890ff; // Change color on hover
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    p {
+        line-height: 1.5; // Line height for better readability
+    }
+}

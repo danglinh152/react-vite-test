@@ -10,7 +10,6 @@ import LoginChildren from "../../components/auth/formLogin";
 import { useLocation } from "react-router-dom";
 import RegisterChildren from "../../components/auth/formRegister";
 import Loader from "../../components/Loader";
-import Back from "../../components/back";
 import ForgotPasswd from "../../components/auth/formForgotPasswd";
 
 const AuthPage: React.FC = () => {
