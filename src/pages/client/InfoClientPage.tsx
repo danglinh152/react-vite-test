@@ -9,7 +9,7 @@ import { useAuth } from "../../provider/authProvider";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 import { Navigate } from "react-router-dom";
-import "../../styles/information.scss";
+
 
 const { Title, Text } = Typography;
 
