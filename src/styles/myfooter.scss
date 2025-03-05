@@ -60,3 +60,15 @@
         line-height: 1.5; // Line height for better readability
     }
 }
+
+
+.hover-effect {
+    transition: color 0.3s;
+    color: #787878;
+    padding: 10px 0;
+  }
+  
+  .hover-effect:hover {
+    color: #007bff; /* Thay đổi màu khi hover */
+  }
+  

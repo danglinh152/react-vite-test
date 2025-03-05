@@ -4,7 +4,7 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Input } from "antd";
 import type { GetProps, MenuProps } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell, faCartPlus } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faBoxesPacking, faCartPlus, faCircleInfo, faGift, faHeadset, faList } from "@fortawesome/free-solid-svg-icons";
 import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import MyFooter from "../../components/layout/MyFooter";
 
@@ -168,7 +168,9 @@ const HomeLayout: React.FC = () => {
 
   return (
     <Layout>
-      <Header style={{ position: "sticky", top: 0, zIndex: 2, width: "100%", display: "flex", alignItems: "center" }}>
+      <div style={{position: "sticky", top: 0, zIndex: 2, width: "100%"  }}>
+
+      <Header style={{  display: "flex", alignItems: "center" }}>
         <div className="logo" >
             <img src="http://localhost:8080/storage/upload/logo.png"  onClick={() => navigate(`/`)} style={{ height:100,cursor:"pointer" }} alt="" />
           </div>
@@ -203,7 +205,36 @@ const HomeLayout: React.FC = () => {
           </Dropdown>
         </div>
       </Header>
-      <Content style={{ minHeight: "100vh", padding: "20px 0" }}>
+      <div style={{ background: "#f0f2f5", padding: "10px", textAlign: "center" }}>
+
+      <Row justify="space-between" gutter={16}>
+        <Col span={7} style={{ color:"#787878", cursor: "pointer", display: "flex", justifyContent: "flex-start",paddingLeft:50 }}>
+          <FontAwesomeIcon icon={faList} />
+          Danh mục sản phẩm
+        </Col>
+        <Col span={17} style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+          <Col span={3} style={{ color:"#787878", cursor: "pointer", display: "flex", justifyContent: "center" }}>
+            <FontAwesomeIcon icon={faCircleInfo} />
+            Trợ giúp
+          </Col>
+          <Col span={5} style={{ color:"#787878", cursor: "pointer", display: "flex", justifyContent: "center" }}>
+            <FontAwesomeIcon icon={faGift} />
+            Ưu đãi & tiện ích
+          </Col>
+          <Col span={5} style={{ color:"#787878", cursor: "pointer", display: "flex", justifyContent: "center" }}>
+            <FontAwesomeIcon icon={faBoxesPacking} />
+            Kiểm tra đơn hàng
+          </Col>
+          <Col span={5} style={{ color:"#787878", cursor: "pointer", display: "flex", justifyContent: "center" }}>
+            <FontAwesomeIcon icon={faHeadset} />
+            Hotline: 1900 1234
+          </Col>
+        </Col>
+      </Row>
+      </div>
+
+</div>
+      <Content style={{ minHeight: "100vh", padding:0,paddingBottom: 20 }}>
         <div style={{ minHeight: "100vh", backgroundColor: "#f5f5f5",paddingLeft:50,paddingRight:50}}>
           <Outlet />
         </div>

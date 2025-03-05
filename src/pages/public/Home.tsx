@@ -9,6 +9,7 @@ import SingleProduct from "../../components/card/SingleProduct";
 import { useNavigate } from "react-router-dom";
 import IconCard from "../../components/iconcard/IconCard";
 import TopBookProps from "../../components/topbook/topbook";
+import ImageCard from "../../components/iconcard/imageCard";
 
 
 const Home = () => {
@@ -25,6 +26,14 @@ const Home = () => {
       <Slider  />
       <NextoSlider/>
     </div>
+    <div style={{ width:"100%", height:200,background:"white",border:"1px solid white",borderRadius:12, marginBottom:20,display:"flex",alignItems:"center",justifyContent:"space-around" }}>
+      <ImageCard path="MCBooks_KCt3_840x320.png"/>
+      <ImageCard path="MCBooks_KCt3_840x320.png"/>
+      <ImageCard path="MCBooks_KCt3_840x320.png"/>
+      <ImageCard path="MCBooks_KCt3_840x320.png"/>
+
+      </div>
+
     <div style={{ width:"100%", height:70,background:"white",border:"1px solid white",borderRadius:12, marginBottom:20,display:"flex",alignItems:"center",justifyContent:"space-between" }}>
       <div style={{ display:"flex",alignItems:"center" }}>
          <img src="http://localhost:8080/storage/upload/download.png" style={{ paddingLeft:20,height:60,width:125 }} alt="" />
