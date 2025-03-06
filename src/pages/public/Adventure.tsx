@@ -1,22 +1,28 @@
 import { faFilter, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Col, Divider, Radio, Rate, Row, Select } from "antd";
+import { Button, Col, Divider, Input, InputNumber, Radio, Rate, Row, Select } from "antd";
 import { useState } from "react";
 import AllProduct from "../../components/card/AllProduct";
+import SortProduct from "../../components/card/SortProduct";
 
 const Adventure = () => {
   const [target, setTarget] = useState('Popular');
-  const [valueRate, setValueRate] = useState(5);
+  const [valueRate, setValueRate] = useState(0);
+  const [valueShip, setValueShip] = useState(0);
+  const [valueSort, setValueSort] = useState('default');
+
   
-  const onChange = (value:any) => {
-    console.log(`selected ${value}`);
+  const onChangeSort = (value:any) => {
+    setValueSort(value);
+    // console.log(valueSort)
   };
-  const onSearch = (value:any) => {
-    console.log('search:', value);
-  }; 
+  
 
   const onChangeRate = (e:any) => {
     setValueRate(e.target.value);
+  };
+  const onChangeShip = (e:any) => {
+    setValueShip(e.target.value);
   };
   return (
     <>
@@ -91,6 +97,42 @@ const Adventure = () => {
                 ]}
               />
           </div>
+          <Divider/>
+                <div style={{ paddingBottom:12 }}>
+                <p style={{ fontSize:16,fontWeight:600,padding:"0 0 12px 12px " }}>Khoảng giá</p>
+                  <div style={{ display:"flex",alignItems:"center" }}>
+                  <InputNumber placeholder="Từ ... VNĐ" style={{ marginLeft:12 }}/>
+                  <p style={{ fontSize:16,fontWeight:600,padding:"0 12px"  }}>-</p>
+                  <InputNumber placeholder="Đến ... VNĐ" style={{ width:100 }}/>
+                <Button style={{ marginLeft:12 }} type="primary">Xác nhận</Button>
+                  </div>
+                </div>
+
+          <Divider/>
+          <div>
+            <p style={{ fontSize:16,fontWeight:600,padding:"0 0 12px 12px " }}>Đơn vị vận chuyển</p>
+            <Radio.Group
+            style={{ display: 'flex',flexDirection: 'column', gap: 8, paddingLeft:20}}
+                onChange={onChangeShip}
+                value={valueShip}
+                options={[
+                  {
+                    value: 1,
+                    label: "Hỏa tốc",
+                  },
+                  {
+                    value: 2,
+                    label: "Nhanh",
+                  },
+                  {
+                    value: 3,
+                    label: "Tiết kiệm",
+                  }
+                ]}
+              />
+          </div> 
+          <Divider/>
+    
         </div>
         </Col>
         <Col span={18} style={{}}>
@@ -105,22 +147,28 @@ const Adventure = () => {
               showSearch
               placeholder="Sắp xếp theo..."
               optionFilterProp="label"
-              onChange={onChange}
-              onSearch={onSearch}
+              onChange={onChangeSort}
+              // onSearch={onSearch}
               options={[
                 {
-                  value: 'mintomax',
+                  value: 'asc',
                   label: 'Giá từ thấp đến cao',
                 },
                 {
-                  value: 'maxtomin',
+                  value: 'desc',
                   label: 'Giá từ cao đến thấp',
                 },
               ]}
             />
         </div>
         <div style={{ width:"100%", height:1300,background:"white",border:"1px solid white",borderRadius:12, marginTop:20}}>
-          <AllProduct/>
+     
+           
+          {valueSort === 'asc' ? (
+            <SortProduct sortOrder="asc" />
+        ) : valueSort === 'desc' ? (
+          <SortProduct sortOrder="desc" />
+          ) :   <AllProduct/>}
         </div>
 
         </Col>
