@@ -1,10 +1,10 @@
 
-.card_container > div {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    flex-direction: row;
-  }
+// .card_container > div {
+//     display: flex;
+//     justify-content: space-between;
+//     flex-wrap: wrap;
+//     flex-direction: row;
+//   }
 
   .card {
     border:1px solid white;
@@ -21,7 +21,7 @@
     }
   
     .card:hover {
-   transform: translateY(-3%);
+   transform: translateY(-1%);
    box-shadow: rgba(23, 120, 255, 0.25) 0px 13px 47px -5px, rgba(0, 21, 41, 0.3) 0px 8px 16px -8px;
   }
   

@@ -65,7 +65,7 @@ const CardProduct = () => {
 
   return (
     <StyledWrapper>
-      <div className="card_container" style={{ marginBottom:20 }}>
+      <div className="card_container" style={{ marginBottom:20,display:"flex" ,justifyContent:"space-around",marginTop:20}}>
       {listBook.map((book) => (
         <div className="card" key={book.bookId} onClick={() => navigate(`/detail/${book.bookId}`)} style={{ cursor: "pointer" }}>
           <div

@@ -38,7 +38,7 @@ const Detail = () => {
     setRefreshFeedbacks((prev) => !prev); // Toggle to trigger re-fetch
   };
 
-  const handleAddToCart = async (id: string | undefined) => {
+  const handleAddToCart: any = async (id: string | undefined) => {
     if (!id) {
       console.error("No book ID provided");
       return;
