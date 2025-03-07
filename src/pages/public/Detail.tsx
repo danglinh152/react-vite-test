@@ -38,7 +38,7 @@ const Detail = () => {
     setRefreshFeedbacks((prev) => !prev); // Toggle to trigger re-fetch
   };
 
-  const fetchBookById = async (id: string | undefined) => {
+  const handleAddToCart = async (id: string | undefined) => {
     if (!id) {
       console.error("No book ID provided");
       return;
@@ -54,7 +54,60 @@ const Detail = () => {
       const json = await response.json();
       const data = json.data;
 
-      console.log("Data from API:", data); // Log the data received from the API
+      // Destructure properties from data and set the state
+      if (data) {
+        const {
+          bookId,
+          title,
+          image,
+          author,
+          isbn,
+          avgRate,
+          description,
+          descriptionDetails,
+          infoDetails,
+          listPrice,
+          sellingPrice,
+          quantity,
+        } = data;
+
+        setBook({
+          bookId,
+          title,
+          image,
+          author,
+          isbn,
+          avgRate,
+          description,
+          descriptionDetails,
+          infoDetails,
+          listPrice,
+          sellingPrice,
+          quantity,
+        });
+      } else {
+        console.error("No data found for the given ID");
+      }
+    } catch (error) {
+      console.error("Failed to fetch book:", error);
+    }
+  };
+
+  const fetchBookById = async (id: string | undefined) => {
+    if (!id) {
+      console.error("No book ID provided");
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8080/api/books/${id}`);
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const json = await response.json();
+      const data = json.data;
 
       // Destructure properties from data and set the state
       if (data) {
@@ -145,6 +198,8 @@ const Detail = () => {
 
   useEffect(() => {
     fetchBookById(id);
+    console.log(token);
+
     if (token) {
       const decodedToken = jwtDecode(token);
       const currentTime = Date.now() / 1000; // Thời gian hiện tại tính bằng giây
@@ -159,6 +214,7 @@ const Detail = () => {
         }
       }
       setDecodedToken(decodedToken);
+      console.log("decodedToken", decodedToken);
     }
   }, [id, token]); // Add token to dependency array to decode when it changes
 
@@ -205,6 +261,7 @@ const Detail = () => {
                   danger
                   variant="outlined"
                   style={{ flex: 1, marginRight: "5px" }} // Add flex and margin to the right
+                  onClick={handleAddToCart}
                 >
                   <ShoppingCartOutlined />
                   <b>Thêm vào giỏ hàng</b>
@@ -383,7 +440,9 @@ const Detail = () => {
                 {
                   key: "2",
                   label: "Yêu thích nhất",
-                  children: <TopFeedback bookId={id} refresh={refreshFeedbacks}/>,
+                  children: (
+                    <TopFeedback bookId={id} refresh={refreshFeedbacks} />
+                  ),
                 },
               ]}
             />
@@ -392,7 +451,6 @@ const Detail = () => {
             {decodedToken ? (
               <div>
                 <Input.TextArea
-                
                   rows={4}
                   placeholder="Nhập nhận xét của bạn..."
                   value={feedbackText}

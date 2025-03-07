@@ -79,8 +79,16 @@ const LayoutAdmin: React.FC = () => {
   };
 
   useEffect(() => {
-    getAccount();
-    refreshToken();
+    const fetchData = async () => {
+      try {
+        await refreshToken(); // Chờ cho refreshToken hoàn thành
+        await getAccount(); // Sau đó mới gọi getAccount
+      } catch (error) {
+        console.error("Error during fetching data:", error);
+      }
+    };
+
+    fetchData();
 
     switch (location.pathname) {
       case "/admin/":
