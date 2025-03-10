@@ -148,7 +148,7 @@ const LayoutAdmin: React.FC = () => {
 
   return (
     <div>
-      <Layout style={{ height: "98vh" }}>
+      <Layout style={{ height: "100vh" }}>
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -218,7 +218,6 @@ const LayoutAdmin: React.FC = () => {
           </div>
         </Layout>
       </Layout>
-      <MyFooter />
     </div>
   );
 };
