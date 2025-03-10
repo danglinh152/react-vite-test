@@ -1,6 +1,6 @@
 import { Button, Input, Tabs, Rate } from "antd";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { ShoppingCartOutlined, StarFilled } from "@ant-design/icons";
 import NewestFeedback from "./NewestFeedback";
 import TopFeedback from "./TopFeedback";
@@ -33,63 +33,38 @@ const Detail = () => {
   const [feedbackText, setFeedbackText] = useState<string>(""); // State for feedback text
   const [rating, setRating] = useState<number>(0);
   const [refreshFeedbacks, setRefreshFeedbacks] = useState<boolean>(false);
+  // const navigate = useNavigate();
 
   const handleNewFeedback = () => {
     setRefreshFeedbacks((prev) => !prev); // Toggle to trigger re-fetch
   };
 
-  const handleAddToCart: any = async (id: string | undefined) => {
-    if (!id) {
-      console.error("No book ID provided");
-      return;
-    }
-
-    try {
-      const response = await fetch(`http://localhost:8080/api/books/${id}`);
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const json = await response.json();
-      const data = json.data;
-
-      // Destructure properties from data and set the state
-      if (data) {
-        const {
-          bookId,
-          title,
-          image,
-          author,
-          isbn,
-          avgRate,
-          description,
-          descriptionDetails,
-          infoDetails,
-          listPrice,
-          sellingPrice,
-          quantity,
-        } = data;
-
-        setBook({
-          bookId,
-          title,
-          image,
-          author,
-          isbn,
-          avgRate,
-          description,
-          descriptionDetails,
-          infoDetails,
-          listPrice,
-          sellingPrice,
-          quantity,
+  const handleAddToCart: any = async () => {
+    if (!decodedToken) {
+      toast.error("Bạn cần đăng nhập để mua hàng.");
+      // setTimeout(() => {
+      //   navigate("/auth");
+      // }, 2000);
+    } else {
+      try {
+        const response = await fetch(`http://localhost:8080/api/add-to-cart`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: decodedToken.userId,
+            bookId: id,
+          }),
         });
-      } else {
-        console.error("No data found for the given ID");
+
+        console.log(response);
+
+        toast.success("Đã thêm vào giỏ hàng!"); // Confirmation message
+      } catch (error) {
+        toast.error("Có lỗi xảy ra. Vui lòng thử lại."); // Improved error message
       }
-    } catch (error) {
-      console.error("Failed to fetch book:", error);
     }
   };
 
@@ -198,7 +173,6 @@ const Detail = () => {
 
   useEffect(() => {
     fetchBookById(id);
-    console.log(token);
 
     if (token) {
       const decodedToken = jwtDecode(token);
@@ -214,7 +188,6 @@ const Detail = () => {
         }
       }
       setDecodedToken(decodedToken);
-      console.log("decodedToken", decodedToken);
     }
   }, [id, token]); // Add token to dependency array to decode when it changes
 
