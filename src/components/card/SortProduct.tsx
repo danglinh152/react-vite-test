@@ -18,14 +18,14 @@ interface Book {
 }
 
 interface SortProductProps {
+  sortTarget: string;
   sortOrder: string;
   sortRate: number;
   sortPrice:number;
 }
 
-const SortProduct = ({ sortOrder,sortRate,sortPrice }: SortProductProps) => {
+const SortProduct = ({ sortTarget,sortOrder,sortRate,sortPrice }: SortProductProps) => {
   const [listBook, setListBook] = useState<Book[]>([]);
-  // const [order,setOrder] = useState("default")
   const [meta, setMeta] = useState({
     currentPage: 1,
     pageSize: 12,
@@ -50,12 +50,19 @@ const SortProduct = ({ sortOrder,sortRate,sortPrice }: SortProductProps) => {
         if (sortRate > 0) {
         params.append("filter", `avgRate>=${sortRate} and avgRate<=${sortRate + 1}`);
       }
-      if (sortPrice > 0) {
+      if (sortPrice > 0 && sortPrice<800) {
         params.append("filter", `sellingPrice>=${sortPrice} and sellingPrice<=${sortPrice + 199}`);
       }
-  
+      if(sortPrice>800){
+        params.append("filter", `sellingPrice>${sortPrice}`);        
+      }
+      if(sortTarget){
+        params.append("sort", `${sortTarget},desc`);
+      }
+      // console.log(sortTarget,sortPrice,sortPrice,sortOrder);
+      
       const url = `http://localhost:8080/api/books?${params.toString()}`;
-      console.log(url);
+      // console.log(url);
       
       const response = await fetch(url);
       const json = await response.json();
@@ -74,7 +81,7 @@ const SortProduct = ({ sortOrder,sortRate,sortPrice }: SortProductProps) => {
 
   useEffect(() => {
     fetchBooks();
-  }, [meta.currentPage, sortOrder,sortRate,sortPrice]);
+  }, [meta.currentPage,sortTarget,sortOrder,sortRate,sortPrice]);
 
   const handlePageChange = (page: number) => {
     setMeta((prevMeta) => ({ ...prevMeta, currentPage: page }));
@@ -103,7 +110,11 @@ const SortProduct = ({ sortOrder,sortRate,sortPrice }: SortProductProps) => {
               <p className="text-body">{book.author}</p>
             </div>
             <div className="card-footer">
-              <span className="text-title">${book.sellingPrice}</span>
+            <div>
+              <span className="text-listPrice">${book.listPrice}</span>
+              <span className="text-sellprice">${book.sellingPrice}</span>
+
+              </div>
               <div
                 className="card-button"
                 onClick={(e) => {

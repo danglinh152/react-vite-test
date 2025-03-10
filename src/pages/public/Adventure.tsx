@@ -13,18 +13,22 @@ const onSearch: SearchProps["onSearch"] = (value:any, _e:any, info:any) =>
   console.log(info?.source, value);
 
 const Adventure = () => {
-  const [target, setTarget] = useState('Popular');
+  const [Valuetarget, setValueTarget] = useState('default');
   const [valueRate, setValueRate] = useState(0);
   const [valuePrice, setValuePrice] = useState(0);
   const [valueShip, setValueShip] = useState(0);
   const [valueSort, setValueSort] = useState('default');
 
   
+  const onChangeTarget = (e:any) => {
+    setValueTarget(e.target.value);
+    
+  };
+
   const onChangeSort = (value:any) => {
     setValueSort(value);
   };
   
-
   const onChangeRate = (e:any) => {
     setValueRate(e.target.value);
     
@@ -177,9 +181,9 @@ const Adventure = () => {
         <Col span={18} style={{}}>
         <div style={{ width:"100%", height:70,background:"white",border:"1px solid white",borderRadius:12, marginTop:20,display:"flex",alignItems:"center"}}>
           <p style={{ fontSize:18,fontWeight:600,padding:"0 12px" }} >Sắp xếp theo:</p>
-          <Radio.Group value={target} onChange={(e) => setTarget(e.target.value)}>
-            <Radio.Button value="Popular">Phổ biến</Radio.Button>
-            <Radio.Button value="Latest">Mới nhất</Radio.Button>
+          <Radio.Group value={Valuetarget} onChange={onChangeTarget}>
+            <Radio.Button value="quantity">Phổ biến</Radio.Button>
+            <Radio.Button value="updatedAt">Mới nhất</Radio.Button>
             <Radio.Button value="bestseller">Bán chạy</Radio.Button>
           </Radio.Group>
           <Select style={{ paddingLeft:12,minWidth:240 }}
@@ -205,12 +209,13 @@ const Adventure = () => {
                           onSearch={onSearch}
                           enterButton
                         />
+                        <p>${Valuetarget}${valueRate}${valuePrice}${valueSort}</p>
         </div>
         <div style={{ width:"100%", height:1300,background:"white",border:"1px solid white",borderRadius:12, marginTop:20}}>
      
-        {valueSort == "default" && valueRate==0 ? <AllProduct /> : <SortProduct sortOrder={valueSort} sortRate={valueRate} sortPrice={valuePrice} /> }
+        {valueSort == "default" && valueRate==0 && Valuetarget == "default" && valuePrice==0 ? <AllProduct /> : <SortProduct sortTarget={Valuetarget} sortOrder={valueSort} sortRate={valueRate} sortPrice={valuePrice} /> }
 
-
+ 
         </div>
 
         </Col>
