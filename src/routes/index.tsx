@@ -12,6 +12,7 @@ import Detail from "../pages/public/Detail";
 import InfoClient from "../pages/client/InfoClientPage";
 import { ProtectedRouteAdmin } from "./ProtectedRouteAdmin";
 import { ProtectedRouteClient } from "./ProtectedRouteClient";
+import Cart from "../pages/public/Cart";
 
 const Routes = () => {
   const { token } = useAuth();
@@ -38,6 +39,10 @@ const Routes = () => {
         {
           path: "/detail/:id",
           element: <Detail />,
+        },
+        {
+          path: "/cart",
+          element: <Cart />,
         }
      
       ],

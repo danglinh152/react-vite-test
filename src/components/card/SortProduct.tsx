@@ -19,10 +19,13 @@ interface Book {
 
 interface SortProductProps {
   sortOrder: string;
+  sortRate: number;
+  sortPrice:number;
 }
 
-const SortProduct = ({ sortOrder }: SortProductProps) => {
+const SortProduct = ({ sortOrder,sortRate,sortPrice }: SortProductProps) => {
   const [listBook, setListBook] = useState<Book[]>([]);
+  // const [order,setOrder] = useState("default")
   const [meta, setMeta] = useState({
     currentPage: 1,
     pageSize: 12,
@@ -32,11 +35,29 @@ const SortProduct = ({ sortOrder }: SortProductProps) => {
 
   const navigate = useNavigate();
 
+
   const fetchBooks = async () => {
+    
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/books?page=${meta.currentPage}&size=${meta.pageSize}&sort=sellingPrice,${sortOrder}`
-      );
+      const params = new URLSearchParams({
+        page: meta.currentPage.toString(),
+        size: meta.pageSize.toString(),
+      });
+  
+      if (sortOrder!="default") {
+        params.append("sort", `sellingPrice,${sortOrder}`);
+      }
+        if (sortRate > 0) {
+        params.append("filter", `avgRate>=${sortRate} and avgRate<=${sortRate + 1}`);
+      }
+      if (sortPrice > 0) {
+        params.append("filter", `sellingPrice>=${sortPrice} and sellingPrice<=${sortPrice + 199}`);
+      }
+  
+      const url = `http://localhost:8080/api/books?${params.toString()}`;
+      console.log(url);
+      
+      const response = await fetch(url);
       const json = await response.json();
 
       setListBook(json.data.data);
@@ -53,7 +74,7 @@ const SortProduct = ({ sortOrder }: SortProductProps) => {
 
   useEffect(() => {
     fetchBooks();
-  }, [meta.currentPage, sortOrder]);
+  }, [meta.currentPage, sortOrder,sortRate,sortPrice]);
 
   const handlePageChange = (page: number) => {
     setMeta((prevMeta) => ({ ...prevMeta, currentPage: page }));

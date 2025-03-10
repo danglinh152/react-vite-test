@@ -25,6 +25,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import MyFooter from "../../components/layout/MyFooter";
+import HoverTable from "../../components/hoverCategory/hoverCategory";
+import { ShoppingCart } from "lucide-react";
 
 interface User {
   firstName: string;
@@ -33,11 +35,6 @@ interface User {
 }
 
 const { Header, Content } = Layout;
-type SearchProps = GetProps<typeof Input.Search>;
-const { Search } = Input;
-
-const onSearch: SearchProps["onSearch"] = (value, _e, info) =>
-  console.log(info?.source, value);
 
 const HomeLayout: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -232,12 +229,7 @@ const HomeLayout: React.FC = () => {
               justifyContent: "center",
             }}
           >
-            <Search
-              style={{ maxWidth: 250 }}
-              placeholder="Tìm kiếm..."
-              onSearch={onSearch}
-              enterButton
-            />
+           
             <FontAwesomeIcon
               icon={faBell}
               style={{
@@ -247,15 +239,16 @@ const HomeLayout: React.FC = () => {
                 marginLeft: 32,
               }}
             />
-            <FontAwesomeIcon
+            <ShoppingCart 
               style={{
                 cursor: "pointer",
                 color: "white",
-                fontSize: 16,
+                width: 28,
+                height: 28,
                 marginLeft: 32,
               }}
-              icon={faCartPlus}
-            />
+              onClick={() => navigate("/cart")}
+                          />
             <Dropdown menu={{ items }}>
               <a onClick={(e) => e.preventDefault()}>
                 <Button
@@ -281,17 +274,20 @@ const HomeLayout: React.FC = () => {
         >
           <Row justify="space-between" gutter={16}>
             <Col
-              span={7}
-              style={{
-                color: "#787878",
-                cursor: "pointer",
-                display: "flex",
-                justifyContent: "flex-start",
-                paddingLeft: 50,
-              }}
-            >
-              <FontAwesomeIcon icon={faList} />
-              Danh mục sản phẩm
+              span={7}     
+            >  <div
+                    style={{
+                        color: "#787878",
+                        cursor: "pointer",
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        paddingLeft: 50,
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faList} />
+                    Danh mục sản phẩm
+                  </div>
+
             </Col>
             <Col
               span={17}
