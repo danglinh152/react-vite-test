@@ -13,6 +13,7 @@ import {
 import CardProduct from "../../components/card/CardProduct";
 import { toast } from "react-toastify";
 import CartCheckout from "../../components/checkout/CartCheckout";
+import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -34,6 +35,7 @@ const Checkout = () => {
   const [shippingMethod, setShippingMethod] = useState("");
   const [promoCode, setPromoCode] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserInfo = async (userId: string) => {
@@ -92,12 +94,96 @@ const Checkout = () => {
     console.log(`checked = ${e.target.checked}`);
   };
 
-  const handleSubmit = () => {
+  const vnpay = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/vnpay`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ orderInfo: "kkkk", amount: 50000 }), //mai mốt sửa lại
+      });
+
+      const json = await response.json();
+
+      // Ensure that paymentUrl is an absolute URL
+      const paymentUrl = new URL(json.data.paymentUrl);
+
+      // Navigate to the absolute payment URL
+      window.location.href = paymentUrl.href; // or use navigate(paymentUrl.href) if you're using a routing library
+    } catch (error: any) {
+      toast.error(error?.message || "failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+  const zalopay = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/zalopay`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ orderInfo: "kkkk", amount: 50000 }), //mai mốt sửa lại
+      });
+
+      const json = await response.json();
+
+      // Ensure that paymentUrl is an absolute URL
+      const paymentUrl = new URL(json.data.paymentUrl);
+
+      // Navigate to the absolute payment URL
+      window.location.href = paymentUrl.href; // or use navigate(paymentUrl.href) if you're using a routing library
+    } catch (error: any) {
+      toast.error(error?.message || "failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const momo = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/momo`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ orderInfo: "kkkk", amount: 50000 }), //mai mốt sửa lại
+      });
+
+      const json = await response.json();
+
+      // Ensure that paymentUrl is an absolute URL
+      const paymentUrl = new URL(json.data.paymentUrl);
+
+      // Navigate to the absolute payment URL
+      window.location.href = paymentUrl.href; // or use navigate(paymentUrl.href) if you're using a routing library
+    } catch (error: any) {
+      toast.error(error?.message || "failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async () => {
     if (!address || !shippingMethod || !paymentMethod) {
       message.error("Please fill in all required fields!");
     } else {
       message.success("Order confirmed!");
       // Handle order confirmation logic here
+    }
+
+    if (paymentMethod === "VNPay") {
+      console.log("vnpay");
+      await vnpay();
+    } else if (paymentMethod === "Momo") {
+      console.log("momo");
+      await momo();
+    } else if (paymentMethod === "ZaloPay") {
+      console.log("zalopay");
+      await zalopay();
+    } else {
+      console.log("tiền mặt");
     }
   };
 
@@ -221,7 +307,7 @@ const Checkout = () => {
           <Option value="Tiền mặt">Tiền mặt</Option>
           <Option value="Momo">Momo</Option>
           <Option value="VNPay">VNPay</Option>
-          <Option value="Ngân hàng">Ngân hàng</Option>
+          <Option value="ZaloPay">ZaloPay</Option>
         </Select>
       </div>
       <div

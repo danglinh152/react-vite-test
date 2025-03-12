@@ -229,7 +229,6 @@ const HomeLayout: React.FC = () => {
               justifyContent: "center",
             }}
           >
-           
             <FontAwesomeIcon
               icon={faBell}
               style={{
@@ -239,7 +238,7 @@ const HomeLayout: React.FC = () => {
                 marginLeft: 32,
               }}
             />
-            <ShoppingCart 
+            <ShoppingCart
               style={{
                 cursor: "pointer",
                 color: "white",
@@ -248,7 +247,7 @@ const HomeLayout: React.FC = () => {
                 marginLeft: 32,
               }}
               onClick={() => navigate("/cart")}
-                          />
+            />
             <Dropdown menu={{ items }}>
               <a onClick={(e) => e.preventDefault()}>
                 <Button
@@ -273,21 +272,20 @@ const HomeLayout: React.FC = () => {
           }}
         >
           <Row justify="space-between" gutter={16}>
-            <Col
-              span={7}     
-            >  <div
-                    style={{
-                        color: "#787878",
-                        cursor: "pointer",
-                        display: "flex",
-                        justifyContent: "flex-start",
-                        paddingLeft: 50,
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faList} />
-                    Danh mục sản phẩm
-                  </div>
-
+            <Col span={7}>
+              {" "}
+              <div
+                style={{
+                  color: "#787878",
+                  cursor: "pointer",
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  paddingLeft: 50,
+                }}
+              >
+                <FontAwesomeIcon icon={faList} />
+                Danh mục sản phẩm
+              </div>
             </Col>
             <Col
               span={17}

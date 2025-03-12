@@ -189,9 +189,10 @@ const Detail = () => {
         if (decodedToken.exp < currentTime) {
           // Token đã hết hạn
           setDecodedToken(null);
+        } else {
+          setDecodedToken(decodedToken);
         }
       }
-      setDecodedToken(decodedToken);
     }
   }, [id, token]); // Add token to dependency array to decode when it changes
 

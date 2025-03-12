@@ -15,6 +15,8 @@ import { ProtectedRouteClient } from "./ProtectedRouteClient";
 import Checkout from "../pages/public/Checkout";
 import CheckoutNow from "../pages/public/CheckoutNow";
 import Cart from "../pages/public/Cart";
+import { path } from "framer-motion/client";
+import CheckOutFailed from "../pages/public/CheckOutFailed";
 
 const Routes = () => {
   const { token } = useAuth();
@@ -45,8 +47,7 @@ const Routes = () => {
         {
           path: "/cart",
           element: <Cart />,
-        }
-     
+        },
       ],
     },
     {
@@ -103,6 +104,10 @@ const Routes = () => {
         {
           path: "/check-out-now/:bookId",
           element: <CheckoutNow />,
+        },
+        {
+          path: "check-out-failed",
+          element: <CheckOutFailed />,
         },
       ],
     },
