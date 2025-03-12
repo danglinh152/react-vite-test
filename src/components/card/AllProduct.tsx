@@ -74,7 +74,10 @@ const AllProduct = () => {
               <p className="text-body">{book.author}</p>
             </div>
             <div className="card-footer">
-              <span className="text-title">${book.sellingPrice}</span>
+              <div>
+              <span className="text-listPrice">${book.listPrice}</span>
+              <span className="text-sellprice">${book.sellingPrice}</span>
+              </div>
               <div
                 className="card-button"
                 onClick={(e) => {

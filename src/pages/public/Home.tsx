@@ -26,7 +26,14 @@ const Home = () => {
       <Slider  />
       <NextoSlider/>
     </div>
-
+    <div style={{ width:"100%", height:100,background:"white",border:"1px solid white",borderRadius:12, marginBottom:20,display:"flex",alignItems:"center",justifyContent:"space-around" }}>
+          <IconCard name="Top Deal" path="like.png" />
+          <IconCard name="Trading" path="trading.png" />
+          <IconCard name="Coupon siêu hot" path="coupon.png" />
+          <IconCard name="Top sách bán chạy" path="book.png" />
+          <IconCard name="Xả kho giảm nửa giá" path="sale.png" />
+          <IconCard name="Top sách nước ngoài" path="foreign.png" />  
+      </div>
     <div style={{ width:"100%", height:70,background:"white",border:"1px solid white",borderRadius:12, marginBottom:20,display:"flex",alignItems:"center",justifyContent:"space-between" }}>
       <div style={{ display:"flex",alignItems:"center" }}>
          <img src="http://localhost:8080/storage/upload/download.png" style={{ paddingLeft:20,height:60,width:125 }} alt="" />
@@ -41,15 +48,15 @@ const Home = () => {
     <div style={{ width:"100%", height:400,background:"white",border:"1px solid white",borderRadius:12, marginTop:20,marginBottom:20}}>
       <CardProduct /> 
     </div>
-
-      <div style={{ width:"100%", height:100,background:"white",border:"1px solid white",borderRadius:12, marginBottom:20,display:"flex",alignItems:"center",justifyContent:"space-around" }}>
-          <IconCard name="Top Deal" path="like.png" />
-          <IconCard name="Trading" path="trading.png" />
-          <IconCard name="Coupon siêu hot" path="coupon.png" />
-          <IconCard name="Top sách bán chạy" path="book.png" />
-          <IconCard name="Xả kho giảm nửa giá" path="sale.png" />
-          <IconCard name="Top sách nước ngoài" path="foreign.png" />  
+    <div style={{ width:"100%", height:150,background:"white",border:"1px solid white",borderRadius:12, marginBottom:20,display:"flex",alignItems:"center",justifyContent:"space-around" }}>
+          <TopBookProps name="Ôn thi THPT" path="onthithpt.png" />
+          <TopBookProps name="Ngữ pháp tiếng Anh" path="nguphaptienganh.png" />
+          <TopBookProps name="Kinh dị - bí ẩn" path="kinhdi.png" />
+          <TopBookProps name="Tô màu cảm xúc" path="tomaucamxuc.png" />
+          <TopBookProps name="Hướng dẫn sử dụng mẹ" path="huongdansudungme.png" />
+          <TopBookProps name="Song ngữ thiếu nhi" path="hoangtube.png" />  
       </div>
+     
       <div style={{ width:"100%", height:900,background:"white", marginBottom:20,display:"flex",flexDirection:"column" }}>
       <div style={{ }}>
           <p style={{paddingLeft:20,paddingBottom:20,paddingTop:20, fontSize:18,fontWeight:600 }}>Bạn có thể thích </p>
@@ -92,14 +99,7 @@ const Home = () => {
          </div>
       </div> 
     </div>
-    <div style={{ width:"100%", height:150,background:"white",border:"1px solid white",borderRadius:12, marginBottom:20,display:"flex",alignItems:"center",justifyContent:"space-around" }}>
-          <TopBookProps name="Ôn thi THPT" path="onthithpt.png" />
-          <TopBookProps name="Ngữ pháp tiếng Anh" path="nguphaptienganh.png" />
-          <TopBookProps name="Kinh dị - bí ẩn" path="kinhdi.png" />
-          <TopBookProps name="Tô màu cảm xúc" path="tomaucamxuc.png" />
-          <TopBookProps name="Hướng dẫn sử dụng mẹ" path="huongdansudungme.png" />
-          <TopBookProps name="Song ngữ thiếu nhi" path="hoangtube.png" />  
-      </div>
+    
     </>
   );
 };

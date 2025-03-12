@@ -14,6 +14,7 @@ import { ProtectedRouteAdmin } from "./ProtectedRouteAdmin";
 import { ProtectedRouteClient } from "./ProtectedRouteClient";
 import Checkout from "../pages/public/Checkout";
 import CheckoutNow from "../pages/public/CheckoutNow";
+import Cart from "../pages/public/Cart";
 
 const Routes = () => {
   const { token } = useAuth();
@@ -41,6 +42,11 @@ const Routes = () => {
           path: "/detail/:id",
           element: <Detail />,
         },
+        {
+          path: "/cart",
+          element: <Cart />,
+        }
+     
       ],
     },
     {

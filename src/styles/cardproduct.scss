@@ -62,7 +62,17 @@
      font-size: .9em;
      padding-bottom: 10px;
     }
-  
+    .text-listPrice{
+      text-decoration: line-through;
+      padding-right: 8px;
+    }
+    .text-sellprice{
+      font-weight: 900;
+      font-size: 1.2em;
+      line-height: 1.5;
+      color: #ff424f;
+    }
+
     /*Button*/
     .card-button {
      border: 1px solid #252525;
