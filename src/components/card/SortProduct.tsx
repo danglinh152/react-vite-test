@@ -47,8 +47,11 @@ const SortProduct = ({ sortTarget,sortOrder,sortRate,sortPrice }: SortProductPro
       if (sortOrder!="default") {
         params.append("sort", `sellingPrice,${sortOrder}`);
       }
-        if (sortRate > 0) {
+        if (sortRate > 0 && sortRate < 5 ) {
         params.append("filter", `avgRate>=${sortRate} and avgRate<=${sortRate + 1}`);
+      }
+      if (sortRate == 5 ) {
+        params.append("filter", `avgRate=${sortRate}`);
       }
       if (sortPrice > 0 && sortPrice<800) {
         params.append("filter", `sellingPrice>=${sortPrice} and sellingPrice<=${sortPrice + 199}`);
@@ -56,7 +59,7 @@ const SortProduct = ({ sortTarget,sortOrder,sortRate,sortPrice }: SortProductPro
       if(sortPrice>800){
         params.append("filter", `sellingPrice>${sortPrice}`);        
       }
-      if(sortTarget){
+      if(sortTarget!="default"){
         params.append("sort", `${sortTarget},desc`);
       }
       // console.log(sortTarget,sortPrice,sortPrice,sortOrder);

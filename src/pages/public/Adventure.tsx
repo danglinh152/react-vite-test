@@ -152,7 +152,7 @@ const Adventure = () => {
                 </div>
 
           <Divider/>
-          <div>
+          {/* <div>
             <p style={{ fontSize:16,fontWeight:600,padding:"0 0 12px 12px " }}>Đơn vị vận chuyển</p>
             <Radio.Group
             style={{ display: 'flex',flexDirection: 'column', gap: 8, paddingLeft:20}}
@@ -173,8 +173,8 @@ const Adventure = () => {
                   }
                 ]}
               />
-          </div> 
-          <Divider/>
+          </div>  */}
+          {/* <Divider/> */}
     
         </div>
         </Col>

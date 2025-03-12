@@ -235,7 +235,7 @@ const HomeLayout: React.FC = () => {
               style={{
                 cursor: "pointer",
                 color: "white",
-                fontSize: 16,
+                fontSize: 20,
                 marginLeft: 32,
               }}
             />
@@ -243,8 +243,8 @@ const HomeLayout: React.FC = () => {
               style={{
                 cursor: "pointer",
                 color: "white",
-                width: 28,
-                height: 28,
+                width: 24,
+                height: 24,
                 marginLeft: 32,
               }}
               onClick={() => navigate("/cart")}
@@ -255,7 +255,7 @@ const HomeLayout: React.FC = () => {
                   type="text"
                   icon={<UserOutlined />}
                   style={{
-                    fontSize: "16px",
+                    fontSize:24,
                     width: 64,
                     height: 64,
                     color: "white",
