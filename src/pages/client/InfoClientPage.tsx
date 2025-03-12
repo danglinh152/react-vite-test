@@ -102,7 +102,7 @@ const InfoClient: React.FC = () => {
     };
 
     fetchUserInfo();
-  }, [decodedToken.userId, token]);
+  }, [token]);
 
   if (loading) {
     return <Spin size="large" />;

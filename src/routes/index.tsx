@@ -12,6 +12,8 @@ import Detail from "../pages/public/Detail";
 import InfoClient from "../pages/client/InfoClientPage";
 import { ProtectedRouteAdmin } from "./ProtectedRouteAdmin";
 import { ProtectedRouteClient } from "./ProtectedRouteClient";
+import Checkout from "../pages/public/Checkout";
+import CheckoutNow from "../pages/public/CheckoutNow";
 
 const Routes = () => {
   const { token } = useAuth();
@@ -38,8 +40,7 @@ const Routes = () => {
         {
           path: "/detail/:id",
           element: <Detail />,
-        }
-     
+        },
       ],
     },
     {
@@ -86,22 +87,25 @@ const Routes = () => {
   const routesForNotAuthenticatedOnly = [
     {
       path: "/",
-      element: <div>home</div>,
-    },
-    {
-      path: "/about-us",
-      element: <div>About Us</div>,
-    },
-    {
-      path: "/auth",
-      element: <AuthPage />,
+      // element: <LayoutAdmin />,
+      element: <HomeLayout />,
+      children: [
+        {
+          path: "/check-out",
+          element: <Checkout />,
+        },
+        {
+          path: "/check-out-now/:bookId",
+          element: <CheckoutNow />,
+        },
+      ],
     },
   ];
 
   // Combine and conditionally include routes based on authentication status
   const router = createBrowserRouter([
     ...routesForPublic,
-    ...(!token ? routesForNotAuthenticatedOnly : []),
+    ...(token ? routesForNotAuthenticatedOnly : []),
     ...routesForAuthenticatedOnly,
   ]);
 
