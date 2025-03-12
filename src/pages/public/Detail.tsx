@@ -33,7 +33,7 @@ const Detail = () => {
   const [feedbackText, setFeedbackText] = useState<string>(""); // State for feedback text
   const [rating, setRating] = useState<number>(0);
   const [refreshFeedbacks, setRefreshFeedbacks] = useState<boolean>(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleNewFeedback = () => {
     setRefreshFeedbacks((prev) => !prev); // Toggle to trigger re-fetch
@@ -66,6 +66,10 @@ const Detail = () => {
         toast.error("Có lỗi xảy ra. Vui lòng thử lại."); // Improved error message
       }
     }
+  };
+
+  const handleBuyNow = () => {
+    navigate(`/check-out-now/${id}`);
   };
 
   const fetchBookById = async (id: string | undefined) => {
@@ -185,9 +189,10 @@ const Detail = () => {
         if (decodedToken.exp < currentTime) {
           // Token đã hết hạn
           setDecodedToken(null);
+        } else {
+          setDecodedToken(decodedToken);
         }
       }
-      setDecodedToken(decodedToken);
     }
   }, [id, token]); // Add token to dependency array to decode when it changes
 
@@ -242,6 +247,7 @@ const Detail = () => {
                 <Button
                   type="primary"
                   style={{ flex: 1, backgroundColor: "red", marginLeft: "5px" }} // Add flex and margin to the left
+                  onClick={handleBuyNow}
                 >
                   <b>Mua ngay</b>
                 </Button>

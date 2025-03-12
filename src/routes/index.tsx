@@ -12,7 +12,11 @@ import Detail from "../pages/public/Detail";
 import InfoClient from "../pages/client/InfoClientPage";
 import { ProtectedRouteAdmin } from "./ProtectedRouteAdmin";
 import { ProtectedRouteClient } from "./ProtectedRouteClient";
+import Checkout from "../pages/public/Checkout";
+import CheckoutNow from "../pages/public/CheckoutNow";
 import Cart from "../pages/public/Cart";
+import { path } from "framer-motion/client";
+import CheckOutFailed from "../pages/public/CheckOutFailed";
 
 const Routes = () => {
   const { token } = useAuth();
@@ -43,8 +47,7 @@ const Routes = () => {
         {
           path: "/cart",
           element: <Cart />,
-        }
-     
+        },
       ],
     },
     {
@@ -91,22 +94,29 @@ const Routes = () => {
   const routesForNotAuthenticatedOnly = [
     {
       path: "/",
-      element: <div>home</div>,
-    },
-    {
-      path: "/about-us",
-      element: <div>About Us</div>,
-    },
-    {
-      path: "/auth",
-      element: <AuthPage />,
+      // element: <LayoutAdmin />,
+      element: <HomeLayout />,
+      children: [
+        {
+          path: "/check-out",
+          element: <Checkout />,
+        },
+        {
+          path: "/check-out-now/:bookId",
+          element: <CheckoutNow />,
+        },
+        {
+          path: "check-out-failed",
+          element: <CheckOutFailed />,
+        },
+      ],
     },
   ];
 
   // Combine and conditionally include routes based on authentication status
   const router = createBrowserRouter([
     ...routesForPublic,
-    ...(!token ? routesForNotAuthenticatedOnly : []),
+    ...(token ? routesForNotAuthenticatedOnly : []),
     ...routesForAuthenticatedOnly,
   ]);
 
