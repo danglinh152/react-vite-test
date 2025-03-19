@@ -58,7 +58,7 @@ const Detail = () => {
             bookId: id,
           }),
         });
-
+        
         console.log(response);
 
         toast.success("Đã thêm vào giỏ hàng!"); // Confirmation message
@@ -180,6 +180,7 @@ const Detail = () => {
 
     if (token) {
       const decodedToken = jwtDecode(token);
+      
       const currentTime = Date.now() / 1000; // Thời gian hiện tại tính bằng giây
 
       // Kiểm tra xem exp có tồn tại không
